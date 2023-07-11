@@ -1,0 +1,52 @@
+{
+  "name": "ticketing_qa_chatbot",
+  "version": "1.0.0",
+  "description": "ticketing qa chatbot",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha",
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bruce619/ticketing_qa_chatbot.git"
+  },
+  "author": "Chimuanya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bruce619/ticketing_qa_chatbot/issues"
+  },
+  "homepage": "https://github.com/bruce619/ticketing_qa_chatbot#readme",
+  "dependencies": {
+    "@tensorflow/tfjs": "^4.8.0",
+    "@tensorflow/tfjs-node": "^4.8.0",
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.2",
+    "chai": "^4.3.7",
+    "chai-http": "^4.4.0",
+    "cheerio": "^1.0.0-rc.12",
+    "connect-flash": "^0.1.1",
+    "connect-redis": "^7.1.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "csurf": "^1.11.0",
+    "danfojs-node": "^1.1.2",
+    "dataframe-js": "^1.4.4",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "ioredis": "^5.3.2",
+    "joi": "^17.9.2",
+    "jsnumpy": "^1.1.10",
+    "knex": "^2.5.0",
+    "mocha": "^10.2.0",
+    "natural": "^6.5.0",
+    "nodemailer": "^6.9.3",
+    "nodemon": "^3.0.1",
+    "objection": "^3.0.4",
+    "pg": "^8.11.1",
+    "plotly": "^1.0.6",
+    "string": "^3.3.3"
+  }
+}
