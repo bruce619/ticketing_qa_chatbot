@@ -2,6 +2,7 @@ const tf = require('@tensorflow/tfjs-node')
 const dfd = require('danfojs-node')
 const path = require('path');
 
+// label encoder
 let le = new dfd.LabelEncoder()
 
 const modelPath = path.join(__dirname, '../chatbotmodel');

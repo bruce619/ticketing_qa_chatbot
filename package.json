@@ -4,6 +4,10 @@
   "description": "ticketing qa chatbot",
   "main": "app.js",
   "scripts": {
+    "make-seed": "npx knex seed:make dev --knexfile ./config/knexfile.js",
+    "seed": "npx knex seed:run --knexfile ./config/knexfile.js",
+    "migrate": "npx knex migrate:latest --knexfile ./config/knexfile.js",
+    "down": "npx knex migrate:down --knexfile ./config/knexfile.js",
     "test": "mocha",
     "start": "nodemon app.js"
   },
