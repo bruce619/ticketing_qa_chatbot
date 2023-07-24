@@ -46,14 +46,47 @@ const x_train = padSequences(train)
 const input_shape = x_train.shape[1]
 
 // encoding the outputs
-const y_train = tf.tensor1d(encode.fitTransform(tags_))
+const le = encode.fitTransform(tags_)
+const y_train = tf.tensor1d(le);
+
+const keysArray = Object.keys(encode.classes);
+const encoder_classes = keysArray.map((key) => key);
+const output_length = encode.nClasses
 
 // get the size of unique target data y_train
-const { values, indices } = tf.unique(y_train)
+// const { values, indices } = tf.unique(y_train)
 
-const output_length = values.size
+// const output_length = values.size
 
 const vocab_size = Object.keys(tokenizer.word_index).length
+
+
+async function saveModelInfoToFile() {
+
+    // store objects
+    const model_info = {
+        tokenizer: tokenizer.toJson(),
+        input_shape: input_shape,
+        encoder_classes: encoder_classes,
+        responses: responses
+    }
+
+    // Convert the model_info object to JSON format
+    const model_info_json = JSON.stringify(model_info, null, 2);
+
+    // Define the file path where you want to save the JSON file
+    const filePath = './model_obj.json';
+
+    // Write the JSON data to the file
+    fs.writeFile(filePath, model_info_json, (err) => {
+    if (err) {
+        console.error('Error writing JSON file:', err);
+    } else {
+        console.log('Model information has been saved to model_info.json.');
+    }
+    });
+
+}
 
 module.exports = {
     responses,
@@ -63,5 +96,6 @@ module.exports = {
     output_length,
     vocab_size,
     input_shape,
-    tokenizer
+    tokenizer,
+    saveModelInfoToFile
 }

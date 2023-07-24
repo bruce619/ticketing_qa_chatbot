@@ -1,27 +1,31 @@
 const tf = require('@tensorflow/tfjs-node');
-const { input_shape, output_length, vocab_size, x_train, y_train} = require("./preprocess_data");
+const { input_shape, output_length, vocab_size, x_train, y_train, saveModelInfoToFile} = require("./preprocess_data");
 
 async function fitModel(){
-    console.log(input_shape)
-    console.log(output_length)
-    console.log(vocab_size)
-    console.log(x_train)
-    console.log(y_train)
+    
+    await saveModelInfoToFile();
 
     const i = tf.input({shape: [input_shape]});
-    let x = tf.layers.embedding({inputDim: vocab_size + 1, outputDim: 64}).apply(i)
-    x = tf.layers.lstm({units: 64, returnSequences: true}).apply(x)
+    let x = tf.layers.embedding({inputDim: vocab_size + 1, outputDim: 128}).apply(i)
+    x = tf.layers.lstm({units: 60, returnSequences: true}).apply(x)
     x = tf.layers.flatten().apply(x)
+    x = tf.layers.dense({units: 21, activation: 'relu'}).apply(x)
     x = tf.layers.dense({units: output_length, activation: 'softmax'}).apply(x);
     const model = tf.model({inputs: i, outputs: x})
+    // Set the learning rate for the optimizer
+    const learningRate = 0.001; // You can change this value as needed
+    // Define the optimizer with the learning rate
+    // const optimizer = tf.train.adam(learningRate);
+    // model.compile({loss: 'sparseCategoricalCrossentropy', optimizer: optimizer, metrics: ['accuracy'] })
     model.compile({loss: 'sparseCategoricalCrossentropy', optimizer: 'adam', metrics: ['accuracy'] })
 
     
-    const epochs = 10;
+    const epochs = 5;
     const batchSize = 32;
 
     const options = {
         epochs: epochs,
+        batchSize: batchSize,
         callbacks: {
             onEpochBegin: async (epoch, logs)=>{
                 console.log(`Epoch ${epoch + 1} of ${epochs} ...`)
@@ -37,6 +41,13 @@ async function fitModel(){
 
     return model
 }
+
+
+// (async () => {
+
+//     await fitModel();
+
+// })()
 
 module.exports = {
     fitModel

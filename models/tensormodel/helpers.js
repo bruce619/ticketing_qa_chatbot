@@ -41,19 +41,32 @@ function preprocessDFInputs(dataFrame){
 }
 
 
-// load model
-async function loadModel (tf) {
-  const modelMetadata = await tf.node.getMetaGraphsFromSavedModel(modelPath);
-  const tags = modelMetadata[0].tags;
-  const signatureDefs = modelMetadata[0].signatureDefs;
-  const signatureKeys = Object.keys(signatureDefs);
-  let model = await tf.node.loadSavedModel(modelPath, tags, signatureKeys);
+async function loadModel(){
+  const modelURL = 'file://../../jschatbotmodel/model.json'
+  console.log("loading model ...")
+  const model = await tf.loadLayersModel(modelURL);
+  model.summary()
   return model
+}
+
+
+function tokenizerFromJson(tokenizer){
+  const newTokenizer = new Tokenizer();
+  const parseStringTokenizer = JSON.parse(tokenizer)
+  newTokenizer.num_words = parseStringTokenizer.config.num_words
+  newTokenizer.filters = parseStringTokenizer.config.filters
+  newTokenizer.lower = parseStringTokenizer.config.lower
+  newTokenizer.oov_token = parseStringTokenizer.config.oov_token
+  newTokenizer.index_word = JSON.parse(parseStringTokenizer.config.index_word)
+  newTokenizer.word_index = JSON.parse(parseStringTokenizer.config.word_index)
+  newTokenizer.word_counts = JSON.parse(parseStringTokenizer.config.word_counts)
+  return newTokenizer
 }
 
 
 module.exports = {
     padSequences,
     loadModel,
-    preprocessDFInputs
-}
+    preprocessDFInputs,
+    tokenizerFromJson
+  }

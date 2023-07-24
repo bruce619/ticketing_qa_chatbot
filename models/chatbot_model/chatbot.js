@@ -5,10 +5,6 @@ const readFile = promisify(fs.readFile);
 const { padSequences, loadModel } = require('./helpers');
 const { Tokenizer } = require('tf_node_tokenizer');
 const { removePunctuations } = require('../../utility/utils');
-const dfd = require('danfojs-node')
-
-
-const encode = new dfd.LabelEncoder()
 
 function tokenizerFromJson(tokenizer){
     const newTokenizer = new Tokenizer();
@@ -31,19 +27,18 @@ async function preprocessTextInput(textInput, model, loadedTokenizer, input_shap
         const texts_p = [cleanedTextInput]
         const inputToSequence = loadedTokenizer.textsToSequences(texts_p)
         const tensor = padSequences(inputToSequence, input_shape)
+
         // model predict
         const output = await model.predict(tensor);
-        output.print()
     
         // Get the predicted tag and response
         const predictTagIndex = await output.argMax(-1).arraySync()[0]
-        console.log(predictTagIndex)
 
         // Convert the predicted index to the corresponding tag
         const responseTag = encoder_classes[predictTagIndex]
 
         const responsesArray = responses[responseTag];
-        console.log(responsesArray)
+
         const botResponse = responsesArray[Math.floor(Math.random() * responsesArray.length)];
         /* Randomly select a response for the predicted tag */;
 
@@ -64,14 +59,10 @@ async function getResponse(textInput){
 
     const {responseTag, botResponse} = await preprocessTextInput(textInput, model, loadedTokenizer, input_shape, responses, encoder_classes)
 
-    console.log("tag: ", responseTag)
-    console.log("Bot:", botResponse);
-
     return {responseTag, botResponse}
 
 }
 
-
-const textInput = "i am trying to open an account"
-
-getResponse(textInput)
+module.exports = {
+    getResponse
+}
