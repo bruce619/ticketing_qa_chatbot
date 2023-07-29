@@ -13,33 +13,7 @@ const file_upload = require('./middleware/file_middleware');
 // express app
 const app = express();
 
-
 // MIDDLEWARES
-
-//This example demonstrates adding a generic JSON and URL-encoded parser as a top-level middleware, 
-// which will parse the bodies of all incoming requests. 
-// This is the simplest setup.
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-
-// session middleware
-app.use(cookieParser())
-app.use(session)
-
-
-// cors origin
-// set CORS Origin
-app.use(cors({credentials: true, origin: ['http://localhost:3000']}));
-
-
-// custom csrf protection middleware
-app.use(csrfProtection);
-app.use(createCsrfToken);
-app.use(checkCsrfToken);
-app.use(csrfTokenErrorHandler);
-
-
 // use static files: css, js, img
 app.use(express.static('public'));
 
@@ -49,6 +23,28 @@ app.use(express.static('public'));
 // set view
 app.set('views', './views');
 app.set('view engine', 'ejs');
+
+// Middleware to parse JSON data
+app.use(express.json());
+// Middleware to parse URL-encoded data
+app.use(express.urlencoded({ extended: true }));
+
+
+// session middleware
+app.use(cookieParser())
+app.use(session)
+
+
+// cors origin
+// set CORS Origin
+// app.use(cors({credentials: true, origin: ['http://localhost:3000']}));
+
+
+// custom csrf protection middleware
+app.use(csrfProtection);
+app.use(createCsrfToken);
+app.use(checkCsrfToken);
+app.use(csrfTokenErrorHandler);
 
 // flash messages middleware
 app.use(flash());
@@ -60,6 +56,8 @@ app.use(file_upload.single('image'))
 
 // import routes
 app.use('/', require('./routes/bot'));
+app.use('/', require('./routes/auth'));
+app.use('/', require('./routes/otp'));
 
 // RUN APP
 

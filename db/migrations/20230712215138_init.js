@@ -12,7 +12,6 @@ exports.up = function(knex) {
         table.string('email').unique().notNullable().index()
         table.boolean('two_fa_enabled').defaultTo(false);
         table.string('otp', 10)
-        table.string('is_used').defaultTo(false)
         table.timestamp('expiration_time')
         table.string('password').notNullable();
         table.string('reset_password_token')
@@ -21,17 +20,23 @@ exports.up = function(knex) {
         table.timestamp('updated_at').defaultTo(knex.fn.now());
     })
     .createTable('agents', function(table) {
-        table.uuid('user_id').unique().primary().references('id').inTable('users').onDelete('CASCADE');
-        table.string('staff_id', 200).index();
+        table.uuid('user_id').primary().unique().notNullable().references('id').inTable('users').onDelete('CASCADE');
+        table.string('staff_id', 10).unique().index();
         table.boolean('is_admin').defaultTo(false);
         table.string('department').checkIn(['IT', 'SALES', 'ACCOUNT', 'BUSINESS']).nullable();
         table.timestamp('updated_at').defaultTo(knex.fn.now());
+
+        // Add a primary key constraint using the user_id column
+        // table.primary('user_id');
       })
       .createTable('clients', function(table) {
-        table.uuid('user_id').unique().primary().references('id').inTable('users').onDelete('CASCADE');
+        table.uuid('user_id').primary().unique().notNullable().references('id').inTable('users').onDelete('CASCADE');
         table.string('location', 100);
         table.string('phone', 15);
         table.timestamp('updated_at').defaultTo(knex.fn.now());
+
+        // Add a primary key constraint using the user_id column
+        // table.primary('user_id');
       })
       .createTable('tickets', function (table) {
         table.uuid('id').defaultTo(knex.raw('gen_random_uuid ()')).primary();

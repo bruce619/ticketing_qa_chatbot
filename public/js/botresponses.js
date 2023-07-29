@@ -5,6 +5,8 @@ function replaceNewLineWithHTML(text) {
     return text;
     }
 
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
 const chatBotResponse = async (userInput) => {
     let response;
   
@@ -12,6 +14,7 @@ const chatBotResponse = async (userInput) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'X-CSRF-Token': csrfToken
       },
       body: JSON.stringify({ userInput }),
     })

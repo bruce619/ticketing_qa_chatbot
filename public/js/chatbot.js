@@ -5,27 +5,25 @@ const sendBtn = document.getElementById('send')
 
 //create chat item
 const createChatItem = (message, type) => {
-    console.log(`na here be the issue ${message}`)
 
-  const chatElement = document.createElement('div')
+    const chatElement = document.createElement('div')
 
-  type === 'bot'
-    ? chatElement.classList.add('chatbot__message', 'chatbot__message-bot')
-    : chatElement.classList.add('chatbot__message', 'chatbot__message-user')
-
-  const chatContent =
     type === 'bot'
-      ? `<img src='/img/logo purple.png' /> <p>${message}<span>${getMessageTime()}</span></p>`
-      : `<p>${message} <span>${getMessageTime()}</span></p>`
-
-  chatElement.innerHTML = chatContent
-
-  return chatElement
-}
+      ? chatElement.classList.add('chatbot__message', 'chatbot__message-bot')
+      : chatElement.classList.add('chatbot__message', 'chatbot__message-user')
+  
+    const chatContent =
+      type === 'bot'
+        ? `<img src='/img/logo purple.png' /> <p>${message}<span>${getMessageTime()}</span></p>`
+        : `<p>${message} <span>${getMessageTime()}</span></p>`
+  
+    chatElement.innerHTML = chatContent
+  
+    return chatElement
+  }
 
 const handleSendMessage = async () => {
     const userMessage = chatInput.value.trim()
-  
     if (!userMessage) return
   
     messagesContainer.appendChild(createChatItem(userMessage, 'user'))
@@ -55,17 +53,17 @@ const firstBotMessage = () => {
 
 // Get timestam of new Messages
 const getMessageTime = () => {
-  const time = new Date()
+  const time = new Date();
 
-  const hrs = time.getHours()
-  const mins = time.getMinutes()
-  const AmOrPm = hrs < 12 ? 'AM' : 'PM'
+  const hours = time.getHours();
+  const minutes = time.getMinutes();
+  const AmOrPm = hours < 12 ? 'AM' : 'PM';
 
-  const hours = hrs === 0 ? '12' : hrs % 12 < 10 ? `0${hrs % 12}` : hrs % 12
-  const minutes = mins < 10 ? `0${mins}` : mins
+  const formattedHours = hours % 12 === 0 ? '12' : hours % 12 < 10 ? `0${hours % 12}` : `${hours % 12}`;
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
 
-  return `${hours}:${minutes} ${AmOrPm}`
-}
+  return `${formattedHours}:${formattedMinutes} ${AmOrPm}`;
+};
 
 // Get Date of new Conversation
 const getConversationDate = () => {
@@ -96,8 +94,8 @@ const getConversationDate = () => {
 sendBtn.addEventListener('click', handleSendMessage)
 chatInput.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
+    e.preventDefault()
     handleSendMessage()
   }
 })
-
 firstBotMessage()

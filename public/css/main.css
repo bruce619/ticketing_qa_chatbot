@@ -1,5 +1,53 @@
+body {
+  background-color: #fafafa;
+  font-family: 'Lato', sans-serif;
+}
 img {
-  max-width: 100%;
+  width: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+  height: 100%;
+}
+a:link,
+a:active,
+a:visited {
+  color: #000;
+}
+@keyframes moveInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-10rem);
+  }
+  80% {
+    transform: translateX(1rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+@keyframes moveInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(10rem);
+  }
+  80% {
+    transform: translateX(-1rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+@keyframes moveInBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(3rem);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0);
+  }
 }
 .chatbot__checkbox {
   display: none;
@@ -10,13 +58,13 @@ img {
 }
 .chatbot__button {
   position: fixed;
-  bottom: 25px;
-  right: 25px;
-  height: 50px;
-  width: 50px;
-  background-color: #7f00ff;
+  bottom: 10%;
+  right: 10%;
+  height: 65px;
+  width: 65px;
+  background-color: #063668;
   color: #fff;
-  font-size: 25px;
+  font-size: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -48,7 +96,7 @@ img {
   align-items: center;
   gap: 10px;
   padding: 10px 20px;
-  background-color: #7f00ff;
+  background-color: #063668;
   color: #fff;
   height: 75px;
 }
@@ -142,7 +190,7 @@ img {
   display: none;
 }
 .chatbot__message-user p {
-  background-color: #7f00ff;
+  background-color: #063668;
   color: #fff;
 }
 .chatbot__message-user p span {
@@ -157,7 +205,7 @@ img {
 }
 .btn__send {
   color: #fff;
-  background-color: #7f00ff;
+  background-color: #063668;
   border: none;
   height: 40px;
   width: 40px;
@@ -169,10 +217,360 @@ img {
   text-align: center;
   margin-bottom: 5px;
 }
-.header {
-  height: 10vh;
-  background-color: aqua;
-}
 .container {
   position: relative;
+}
+.section {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+header {
+  height: 95vh;
+  position: relative;
+  margin-bottom: 100px;
+  background-image: linear-gradient(
+      to right bottom,
+      rgba(6, 54, 104, 0.8),
+      rgba(6, 54, 104, 0.4)
+    ),
+    url(/img/women-and-household-chemicals-1030x703.png);
+  background-size: cover;
+  background-position: top;
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+}
+.navigation {
+  padding: 20px 0;
+  background-color: #fff;
+}
+.navigation .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.navigation__brand {
+  font-weight: 700;
+  color: #063668;
+}
+.navigation__actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.navigation__actions-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.navigation__actions-links a:link,
+.navigation__actions-links a:visited,
+.navigation__actions-links a:active {
+  color: #063668;
+  text-decoration: none;
+}
+@media (max-width: 480px) {
+  .navigation__actions {
+    display: none;
+  }
+}
+.btn__signup:link,
+.btn__signup:visited,
+.btn__signup:active {
+  color: #fff;
+  background-color: #063668;
+}
+.btn__login:link,
+.btn__login:visited,
+.btn__login:active {
+  color: #063668;
+}
+.header {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+.header .header__primary {
+  color: #fff;
+  text-transform: uppercase;
+  backface-visibility: hidden;
+  margin-bottom: 30px;
+}
+.header .header__primary--main {
+  display: block;
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: 15px;
+  animation-name: moveInLeft;
+  animation-duration: 1s;
+  animation-timing-function: ease-out;
+}
+.header .header__primary--sub {
+  display: block;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 10px;
+  animation: moveInRight 1s ease-out;
+}
+.btn__primary:link,
+.btn__primary:visited,
+.btn__primary:active {
+  color: #fff;
+  background-color: #063668;
+}
+.features__col {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.feature__box {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.feature__box-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+  font-size: 35px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 1px solid #063668;
+  color: #063668;
+}
+.feature__box-text {
+  text-align: center;
+}
+.feature__box-text h4 {
+  font-weight: 700;
+  color: #063668;
+}
+.heading {
+  margin-bottom: 40px;
+  text-align: center;
+}
+.heading__small {
+  font-weight: 300;
+  color: #a5a5a5;
+  text-transform: uppercase;
+  letter-spacing: 10px;
+}
+.heading__main {
+  font-weight: 700;
+  color: #063668;
+  text-transform: uppercase;
+  letter-spacing: 10px;
+}
+.about__images {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.about__image {
+  border-radius: 50px;
+  overflow: hidden;
+  height: 500px;
+}
+.about__image img {
+  -o-object-fit: cover;
+  object-fit: cover;
+  height: 100%;
+}
+.about__image-2 {
+  margin-top: 50px;
+}
+.about__desc h2 {
+  margin: 50px 0;
+  color: #063668;
+  font-weight: 700;
+  text-transform: capitalize;
+  position: relative;
+}
+.about__desc h2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -10px;
+  height: 3px;
+  width: 20%;
+  background-color: #063668;
+}
+.about__desc a:link,
+.about__desc a:visited,
+.about__desc a:active {
+  color: #063668;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  margin-top: 50px;
+}
+.product__card {
+  width: 100%;
+  max-width: 350px;
+  margin: 20px auto;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  height: 600px;
+}
+.product__card-image {
+  height: 50%;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.product__card-details {
+  padding: 10px 10px 40px;
+  height: 50%;
+  text-align: center;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+.product__card-details h5 {
+  color: #063668;
+  text-transform: capitalize;
+  font-weight: 700;
+}
+.product__card-details a {
+  margin-top: auto;
+}
+.footer {
+  background-color: #063668;
+  color: #fff;
+  min-height: 40vh;
+  display: flex;
+  align-items: flex-end;
+}
+.footer__header {
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+.footer__links {
+  list-style: none;
+  font-size: 14px;
+}
+.footer__link-item {
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+.footer__bottom {
+  border-top: 1px solid #fff;
+  margin-top: 50px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.newsletter_form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.newsletter_form input {
+  flex: 1 0 150px;
+  border-radius: 10px;
+}
+.newsletter_form button {
+  flex: 1 0 40px;
+  background-color: #fff;
+  color: #063668;
+  border-radius: 10px;
+}
+.signup {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 50px;
+}
+.signup__container {
+  width: 100%;
+  max-width: 500px;
+  background-color: #fff;
+  padding: 40px 20px;
+  text-align: center;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.signup__container h4 {
+  color: #063668;
+  text-transform: capitalize;
+  font-size: 25px;
+}
+.signup__form {
+  width: 80%;
+  margin: 50px auto;
+}
+.form_group {
+  margin: 20px 0;
+  position: relative;
+  border-bottom: 1px solid #063668;
+}
+.form_group label {
+  display: block;
+  text-align: left;
+  font-weight: 700;
+  font-size: 14px;
+}
+.form_group input {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  outline: none;
+}
+.form_group button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+  color: #063668;
+}
+.btn__submit {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  background-color: #063668;
+  color: #fff;
+  font-weight: 700;
+  margin: 30px 0;
+}
+.btn__submit:hover {
+  background-color: rgba(6, 54, 104, 0.9);
+  color: #fff;
+}
+
+.info-msg,
+.success-msg,
+.error-msg {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 3px 3px 3px 3px;
+}
+
+#info-msg {
+  color: #059;
+  background-color: #BEF;
+}
+
+#error-msg {
+  color: #D8000C;
+  background-color: #FFBABA;
+}
+
+#success-msg {
+  color: #270;
+  background-color: #DFF2BF;
 }

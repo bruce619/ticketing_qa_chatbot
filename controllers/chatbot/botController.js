@@ -1,11 +1,11 @@
 const { getResponse } = require("../../models/chatbot_model/chatbot")
 
 
-exports.botHomeView = async (req, res) => {
+exports.HomeView = async (req, res) => {
     res.render('chatbot/index.ejs', {})
 }
 
-exports.botHomePost = async (req, res) =>{
+exports.processbotResponseHomeView = async (req, res) =>{
     try {
 
         const {responseTag, botResponse} = await getResponse(req.body.userInput)

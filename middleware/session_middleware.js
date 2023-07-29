@@ -1,9 +1,8 @@
 const config = require('../config/config');
+const { generateRandomSessionId } = require('../utility/helpers');
 const session = require('express-session');
 const Redis = require('ioredis');
-const { generateRandomSessionId } = require('../utility/helpers');
 const RedisStore = require('connect-redis')(session);
-
 
 const SECRET = config.app.secret_key
 

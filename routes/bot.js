@@ -1,11 +1,9 @@
 const express = require('express');
-const { botHomeView, botHomePost } = require('../controllers/chatbot/botController');
 const router = express.Router();
+const { HomeView, processbotResponseHomeView } = require('../controllers/chatbot/botController');
 
 
-
-
-router.get('/', botHomeView)
-router.post('/bot/response', botHomePost)
+router.get('/', HomeView)
+router.post('/bot/response', processbotResponseHomeView)
 
 module.exports = router;
