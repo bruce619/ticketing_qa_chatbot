@@ -1,10 +1,7 @@
-const express = require('express');
 const { otpTimestamp, getRandomAlphanumericString } = require('../../utility/utils');
 const { mailObject, transporter } = require('../../config/email_config');
 const User = require('../../models/user');
 const { forgotPasswordSchema, passwordResetSchema } = require('../../utility/validations');
-const router = express.Router();
-
 
 // forget password page 
 exports.forgotPasswordView = async (req, res) => {
