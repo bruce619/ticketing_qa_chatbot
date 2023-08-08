@@ -28,44 +28,34 @@ exports.processbotResponseHomeView = async (req, res) =>{
 
 
 exports.getConversations = async (req, res) => {
-    const ticketId = req.params.ticketId;
     const userId = req.session.userId
     const userRole = req.session.role; // extract the user role from token
+
+    console.log(userRole)
+    console.log(userId)
   
     try {
 
+        const ticketId = req.params.ticketId;
+
         // use the param ticketId to get the actually ticket id foreignkey
         const ticket_id = await Ticket.query().where('ticket_id', ticketId).first()
+
+        console.log(`ticket id: ${ticket_id.id}`)
+
+
+        console.log(`ticketId: ${ticketId}`)
 
         if (!ticket_id) {
             res.status(500).json({ error: 'An error occurred while retrieving conversation.' });
         }
 
 
-        let conversation;
-        
-        if (userRole === 'client') {
-          // Retrieve conversation data for a client based on the ticket ID
-          conversation = await Conversation.query()
-            .where('ticket_id', ticket_id.id)
-            .where('user_id', userId) // Assuming you have user information in req.user
-            .orderBy('sent_at', 'asc');
-        } else if (userRole === 'agent' || userRole === 'admin') {
-          // Retrieve conversation data for an agent or admin based on the ticket ID
-          conversation = await Conversation.query()
-            .where('ticket_id', ticket_id.id)
-            .orderBy('sent_at', 'asc');
-        }
+        let conversation = await Conversation.query().where('ticket_id', ticket_id.id).orderBy('sent_at', 'asc');
 
-    // Add user_role to each conversation item before sending in the response
-    const conversationWithUserRole = conversation.map(item => ({
-        ...item,
-        user_role: userRole,
-      }));
-
-      console.log(conversationWithUserRole)
+      console.log(conversation)
   
-      res.json(conversationWithUserRole);
+      res.json(conversation);
 
     } catch (error) {
       console.error('Error retrieving conversation:', error);
@@ -93,55 +83,39 @@ exports.sendMessage = async (req, res) => {
     if (error){
         console.log(error)
         res.status(500).json({ error: 'An error occurred while saving conversation.' });
+        return
     }
 
     const getTicket = await Ticket.query().where('ticket_id', value.ticketId).first()
 
     if (!getTicket){
         res.status(500).json({ error: 'An error occurred while saving conversation.' });
+        return
     }
+
+    if (getTicket.status === "CLOSED"){
+        res.status(500).json({ error: "Ticket is has been closed you can't send a message." });
+        return
+    }
+
 
     const ticket_id = getTicket.id
 
     try {
 
-        await Conversation.query().insert({message: value.message, ticket_id: ticket_id, user_id: user, image: value.image})
+        await Conversation.query().insert({message: value.message, ticket_id: ticket_id, user_id: user, user_role: userRole, image: value.image})
 
 
-        let conversation;
+        let conversation = await Conversation.query().where('ticket_id', ticket_id).orderBy('sent_at', 'asc');
         
-        if (userRole === 'client') {
-          // Retrieve conversation data for a client based on the ticket ID
-          conversation = await Conversation.query()
-            .where('ticket_id', ticket_id)
-            .where('user_id', user) // Assuming you have user information in req.user
-            .orderBy('sent_at', 'asc');
-        } else if (userRole === 'agent' || userRole === 'admin') {
-          // Retrieve conversation data for an agent or admin based on the ticket ID
-          conversation = await Conversation.query()
-            .where('ticket_id', ticket_id)
-            .orderBy('sent_at', 'asc');
-        }
-
-    // Add user_role to each conversation item before sending in the response
-    const conversationWithUserRole = conversation.map(item => ({
-        ...item,
-        user_role: userRole,
-      }));
-
-      console.log(conversationWithUserRole)
   
-      res.json(conversationWithUserRole);
+        res.json(conversation);
 
     } catch (err){
         console.log(err)
         res.status(500).json({ error: 'An error occurred while saving conversation.' });
         return
     }
-
-
-
-
 
 
 };

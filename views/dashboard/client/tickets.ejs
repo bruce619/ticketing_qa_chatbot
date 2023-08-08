@@ -122,18 +122,15 @@
                           <td><%= userTicket.agent.staff_id %></td>
                           <td>
 
-                            <% if (userTicket.status !== 'CLOSED') {%>
                             <button
                               type="button"
                               class="btn-chat"
                               data-bs-toggle="tooltip"
                               data-bs-placement="top"
                               title="Start conversation"
-                              onclick="openChatModal('<%= userTicket.ticket_id %>', '<%= userTicket.description %>', '<%= userTicket.created_at %>')"
-                              >
+                              onclick="openChatModal('<%= userTicket.ticket_id %>', '<%= userTicket.description %>', '<%= userTicket.created_at %>')">
                               <i class="fa-solid fa-comment"></i>
                             </button>
-                            <%}%>
 
                             <% if (userTicket.ratings === 0 || userTicket.status !== 'CLOSED') {%> 
                             <button
@@ -202,7 +199,6 @@
                             <td><%= search_result.agent.staff_id %></td>
                             <td>
 
-                              <% if (userTicket.status !== 'CLOSED') {%>
                               <button
                                 type="button"
                                 class="btn-chat"
@@ -212,7 +208,6 @@
                                 onclick="openChatModal('<%= search_result.ticket_id %>', '<%= search_result.description %>', '<%= search_result.created_at %>')">
                                 <i class="fa-solid fa-comment"></i>
                               </button>
-                              <%}%>
 
                               <% if (search_result.ratings === 0 || userTicket.status !== 'CLOSED') {%> 
                               <button

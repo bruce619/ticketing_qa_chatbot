@@ -142,7 +142,7 @@
                           <td><%= userTicket.agent.staff_id %></td>
                           <td><%= userTicket.client.user.first_name %> <%= userTicket.client.user.last_name %></td>
                           <td>
-                            <% if(userTicket.status !== 'CLOSED') {%>
+
                             <button
                               type="button"
                               class="btn-chat"
@@ -153,7 +153,7 @@
                               >
                               <i class="fa-solid fa-comment"></i>
                             </button>
-                            <%}%>
+
                               <!-- use this edit button to open up a modal to reassign the ticket to another agent  -->
                               <button 
                               type="button" 
@@ -218,7 +218,7 @@
                           <td><%= search_result.agent.staff_id %></td>
                           <td><%= search_result.client.user.first_name %> <%= userTicket.client.user.last_name %></td>
                           <td>
-                            <% if (search_result.status !== 'CLOSED') {%>
+
                             <button
                               type="button"
                               class="btn-chat"
@@ -228,7 +228,7 @@
                               onclick="openChatModal('<%= search_result.ticket_id %>', '<%= search_result.description %>', '<%= userTicket.created_at %>')">
                               <i class="fa-solid fa-comment"></i>
                             </button>
-                             <%}%>
+
                               <!-- use this edit button to open up a modal to reassign the ticket to another agent  -->
                               <button 
                               type="button" 

@@ -1,7 +1,7 @@
-const addModal = document.querySelector('#addModal')
-const addTicketButton = document.querySelector('#addButton')
-const closeModalButtons = document.querySelectorAll('.close')
-const cancelButton = document.querySelector('#close_button')
+const addModal = document.querySelector('#addModal');
+const addTicketButton = document.querySelector('#addButton');
+const closeModalButtons = document.querySelectorAll('.close');
+const cancelButton = document.querySelector('#close_button');
 
 
 let currentTicketId = null; // Initialize the variable to store the ticket ID
@@ -31,6 +31,7 @@ function openChatModal(ticketId, description, description_time) {
   const chatModal = document.querySelector('#chatModal');
   const chatTitle = document.querySelector('#chatTitle');
   const messagesContainer = document.getElementById('messages');
+  const error_msg = document.querySelector('#error-msg');
   
   resetChat();
 
@@ -66,11 +67,13 @@ function openChatModal(ticketId, description, description_time) {
         if (chatItem) {
           messagesContainer.appendChild(chatItem);
         } else {
+          error_msg.textContent = `Error creating chat item: ${data}`
           console.error('Error creating chat item:', data);
         }
       });
     })
     .catch(error => {
+      error_msg.textContent = `Error retrieving conversation: ${error}`
       console.error('Error retrieving conversation:', error);
     });
 

@@ -36,8 +36,10 @@ const createChatItem = (data) => {
 };
 
 
-// Handle sending a message
+
 const handleSendMessage = async () => {
+  const error_msg = document.querySelector('#error-msg');
+
   const userMessage = chatInput.value.trim();
   if (!userMessage) return;
 
@@ -52,9 +54,6 @@ const handleSendMessage = async () => {
     messageData.image = imageBase64;
   }
 
-  // Create the first client message using the description
-  firstClientMessage({ ticketDescription, ticketDescriptionTimeStamp });
-
   try {
     const response = await fetch('/api/send-message', {
       method: 'POST',
@@ -66,16 +65,7 @@ const handleSendMessage = async () => {
     });
 
     if (response.ok) {
-      // Message sent successfully, update UI
-      const timestamp = getMessageTime();
-      const messageType = 'sender';
 
-      const data = {
-        message: userMessage,
-        image: '', // No image for sender message
-        timestamp: timestamp,
-        messageType: messageType,
-      };
 
       // Assuming the response is the updated conversation data
       const updatedConversation = await response.json();
@@ -88,7 +78,7 @@ const handleSendMessage = async () => {
         const chatItem = createChatItem({
           message: convo.message,
           image: convo.image,
-          timestamp: convo.sent_at, // Update this based on your response data
+          timestamp: getTimestampFromDate(String(convo.sent_at)), // Update this based on your response data
           messageType: convo.user_role === 'client' ? 'sender' : 'receiver',
         });
 
@@ -96,11 +86,17 @@ const handleSendMessage = async () => {
           messagesContainer.appendChild(chatItem);
         }
       });
+
+ 
     } else {
+      error_msg.textContent = "Failed to send message. Ticket might be closed"
       console.error('Failed to send message.');
+      return
     }
   } catch (error) {
+    error_msg.textContent = `Error sending message:, ${error}`
     console.error('Error sending message:', error);
+    return
   }
 
   chatInput.value = '';

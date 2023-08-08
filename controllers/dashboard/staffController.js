@@ -1044,6 +1044,7 @@ exports.processAgentEditTickets = async (req, res) => {
     console.log(value)
 
     const ticket = await Ticket.query().where("ticket_id", value.ticket_id).first()
+    
 
     const agent = await User.query().where("email", value.email).first()
 

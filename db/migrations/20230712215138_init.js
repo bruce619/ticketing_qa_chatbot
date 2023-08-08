@@ -55,6 +55,7 @@ exports.up = function(knex) {
         table.increments('id').primary();
         table.uuid('ticket_id').notNullable().references('id').inTable('tickets');
         table.uuid('user_id').notNullable().references('id').inTable('users');
+        table.string('user_role');
         table.text('message').notNullable();
         table.string('image').nullable();
         table.timestamp('sent_at').defaultTo(knex.fn.now());

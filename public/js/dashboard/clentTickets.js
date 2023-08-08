@@ -1,7 +1,7 @@
-const addModal = document.querySelector('#addModal')
-const addTicketButton = document.querySelector('#addButton')
-const closeModalButtons = document.querySelectorAll('.close')
-const cancelButton = document.querySelector('#close_button')
+const addModal = document.querySelector('#addModal');
+const addTicketButton = document.querySelector('#addButton');
+const closeModalButtons = document.querySelectorAll('.close');
+const cancelButton = document.querySelector('#close_button');
 
 
 let currentTicketId = null; // Initialize the variable to store the ticket ID
@@ -31,6 +31,7 @@ function openChatModal(ticketId, description, description_time) {
   const chatModal = document.querySelector('#chatModal');
   const chatTitle = document.querySelector('#chatTitle');
   const messagesContainer = document.getElementById('messages');
+  const error_msg = document.querySelector('#error-msg');
   
   resetChat();
 
@@ -57,7 +58,7 @@ function openChatModal(ticketId, description, description_time) {
     .then(conversation => {
       conversation.forEach(convo => {
         const messageType = convo.user_role === 'client' ? 'sender' : 'receiver';
-        const timestamp = getTimestampFromDate(convo.sent_at); // Assuming convo.sent_at is the timestamp
+        const timestamp = getTimestampFromDate(String(convo.sent_at)); // Assuming convo.sent_at is the timestamp
         const data = { message: convo.message, image: convo.image, timestamp, messageType };
         
         // Use the createChatItem function to create the chat item element
@@ -66,12 +67,16 @@ function openChatModal(ticketId, description, description_time) {
         if (chatItem) {
           messagesContainer.appendChild(chatItem);
         } else {
+          error_msg.textContent = `Error creating chat item: ${data}`
           console.error('Error creating chat item:', data);
+          return
         }
       });
     })
     .catch(error => {
+      error_msg.textContent = `Error retrieving conversation: ${error}`
       console.error('Error retrieving conversation:', error);
+      return
     });
 
   chatModal.classList.add('open');
