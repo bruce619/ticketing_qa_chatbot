@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Client - Profile</title>
+
+    <!-- Font awsome Kit -->
+    <script src="https://kit.fontawesome.com/62765ee528.js" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap CDN -->
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous" />
+
+      <!-- custom css -->
+      <link rel="stylesheet" href="/css/dashboard.css" />
+
+    <!-- custom js -->
+    <script src="/js/dashboard/dashboard.js" defer></script>
+
+  </head>
+  <body>
+    <main class="dashboard">
+      <div class="sidebar">
+        <div class="sidebar_top">
+          <h4>Ticketing System</h4>
+        </div>
+        <div class="sidebar_main">
+          <div class="user">
+            <div class="user_image">
+              <img src="/img/user.png" alt="avatar" />
+            </div>
+            <div class="user_info">
+              <h5><%= current_user.fullName() %></h5>
+              <p><%= current_user.email %></p>
+            </div>
+          </div>
+          <div class="sidebar_links">
+            <span class="sidebar_link">
+              <a href="/dashboard/client/ticket"><i class="fa-solid fa-ticket"></i> Tickets</a>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="main_content">
+        <div class="main_content-top">
+          <button
+            type="button"
+            class="sidebar_collapse-btn btn"
+            id="toggleSidebar">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="user">
+            <div class="user_info">
+              <a href="/dashboard/client/edit-profile">Edit Profile</a>
+              <a href="/dashboard/logout">Sign Out</a>
+            </div>
+          </div>
+        </div>
+        <div class="main_content-main">
+          <div class="dashboard_title">
+            <h2>Edit Profile</h2>
+            <div class="dashboard_title-nav">
+              <i class="fa-solid fa-gauge"></i>
+              <small>Home </small>
+              <small><i class="fa-solid fa-chevron-right"></i></small>
+              <small>Edit Profile</small>
+            </div>
+          </div>
+          <div class="dashboard_content">
+            <div class="dashboard_edit">
+              <div class="profile_info">
+                <div class="profile_info-name">
+                  <h5><%= current_user.fullName() %></h5>
+                  <p><%= current_user.email %></p>
+                </div>
+              </div>
+              <form action="/dashboard/client/edit-profile" method="POST" id="edit-profile">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                <div class="form_group">
+                  <label for="first_name">Firstname</label>
+                  <input
+                    type="text"
+                    name="first_name"
+                    id="first_name"
+                    value="<%= current_user.first_name %>" />
+                </div>
+                <div class="form_group">
+                  <label for="last_name">Lastname</label>
+                  <input
+                    type="text"
+                    name="last_name"
+                    id="last_name"
+                    value="<%= current_user.last_name %>" />
+                </div>
+                <div class="form_group">
+                  <label for="email">Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    id="email" 
+                    value="<%= current_user.email %>"
+                    readonly/>
+                </div>
+
+                <div class="form_group">
+                  <label for="location">Location</label>
+                  <input
+                    type="text"
+                    name="location"
+                    id="location"
+                    value="<%= current_user.client.location %>" 
+                    />
+                </div>
+
+                <div class="form_group">
+                  <label for="phone">Phone</label>
+                  <input
+                    type="text"
+                    name="phone"
+                    id="phone"
+                    value="<%= current_user.client.phone %>" 
+                    />
+                </div>
+
+                <label for="Auth" class="Auth_label">
+                  <span>Activate 2 Factor Authentication</span>
+                  <span class="Auth_checkbox">
+                   <% if (current_user.two_fa_enabled){%>
+                      <input type="checkbox" name="two_fa_enabled" id="Auth" value="true" checked>
+                    <%}else{%>
+                      <input type="checkbox" name="two_fa_enabled" id="Auth" value="false" />
+                    <%}%>
+                    <span class="switch">
+                      <span class="yes">Yes</span>
+                      <span class="no">No</span>
+                    </span>
+                  </span>
+                </label>
+
+                <div
+                  class="d-flex justify-content-between mt-4 align-items-center">
+                  <button type="submit" class="btn btn-submit">Save</button>
+                </div>
+              </form>
+            </div>
+          </div>
+          
+          <% if (error.length > 0) {%>
+            <div id="error-msg">
+              <i class="fa fa-times-circle"></i>
+              <%= error %>
+            </div>
+          <%}else{%>
+            <div id="error-msg"></div>
+          <%}%>
+  
+          <% if (success.length > 0){%>
+            <div id="success-msg">
+              <i class="fa fa-check"></i>
+              <%= success %>
+            </div>
+          <%}%>
+
+          <% if (info.length > 0){%>
+            <div id="info-msg">
+              <i class="fa fa-info-circle"></i>
+              <%= info %>
+            </div>
+          <%}%>
+
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

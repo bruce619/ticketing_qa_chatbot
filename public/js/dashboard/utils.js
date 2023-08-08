@@ -23,7 +23,7 @@ const error = document.querySelector('#error-msg')
     let messages = [];
 
     if (passwordInput.value !== passwordConfirmInput.value){
-      messages.push("<i class='fa fa-times-circle'></i>Passwords do not match")
+      messages.push("<i class='fa fa-times-circle'></i>Passwords doesn't match")
     }
 
     if (messages.length > 0){

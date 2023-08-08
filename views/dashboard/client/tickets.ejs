@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="<%= csrfToken %>">
+    <title>Clients - Tickets</title>
+
+    <!-- Font awsome Kit -->
+    <script src="https://kit.fontawesome.com/62765ee528.js" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap CDN -->
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous" />
+
+    <!-- custom css -->
+    <link rel="stylesheet" href="/css/dashboard.css" />
+
+    <!-- custom js -->
+    <script src="/js/dashboard/dashboard.js" defer></script>
+    <script src="/js/dashboard/chat.js" defer></script>
+    <script src="/js/dashboard/clentTickets.js" defer></script>
+
+  </head>
+  <body>
+    <main class="dashboard">
+      <div class="sidebar">
+        <div class="sidebar_top">
+          <h4>Ticketing System</h4>
+        </div>
+        <div class="sidebar_main">
+          <div class="user">
+            <div class="user_image">
+              <img src="/img/user.png" alt="avatar" />
+            </div>
+            <div class="user_info">
+              <h5><%= current_user.fullName() %></h5>
+              <p><%= current_user.email %></p>
+            </div>
+          </div>
+          <div class="sidebar_links">
+            <span class="sidebar_link active">
+              <a href="/dashboard/client/ticket"><i class="fa-solid fa-ticket"></i> Tickets</a>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="main_content">
+        <div class="main_content-top">
+          <button
+            type="button"
+            class="sidebar_collapse-btn btn"
+            id="toggleSidebar">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="user">
+            <div class="user_info">
+              <a href="/dashboard/client/edit-profile">Edit Profile</a>
+              <a href="/dashboard/logout">Sign Out</a>
+            </div>
+          </div>
+        </div>
+        <div class="main_content-main">
+          <div class="dashboard_title">
+            <h2>Tickets</h2>
+            <div class="dashboard_title-nav">
+              <i class="fa-solid fa-gauge"></i>
+              <small>Home </small>
+              <small><i class="fa-solid fa-chevron-right"></i></small>
+              <small>Tickets</small>
+            </div>
+          </div>
+          <div class="dashboard_content">
+            <div class="dashboard_agents">
+              <button type="button" class="btn btn-add" id="addButton">
+                <i class="fa-solid fa-user-plus"></i>Add
+              </button>
+
+              <div class="search_container">
+                <form action="/dashboard/client/ticket" method="GET" class="search_input">
+                  <input type="text" id="search" name="search" placeholder="Search" required/>
+                  <button type="submit">Search</button>
+                </form>
+              </div>           
+
+              <div class="dashboard_agents-table table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">Ticket ID</th>
+                      <th scope="col">Title</th>
+                      <th scope="col">Description</th>
+                      <th scope="col">Priority</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Asigned Agent</th>
+                      <th scope="col">Agent ID</th>
+                      <th scope="col">Chat/Rate</th>
+                    </tr>
+                  </thead>
+                  <tbody id="ticket-table" class="table-body">
+
+                    <!-- Start of if  -->
+                    <% if (userTickets.length>0){%> 
+
+                      <% userTickets.forEach(userTicket => {%>
+                        <tr>
+                          <td><%= userTicket.ticket_id %></td>
+                          <td><%= userTicket.subject %></td>
+                          <td><%= userTicket.description.substring(0, 20)%>...</td>
+                          <td>
+                            <span class="ticket-priority <%= userTicket.priority.toLowerCase() %>">
+                              <%= userTicket.priority %>
+                            </span>
+                          </td>                          
+                          <td><%= userTicket.status %></td>
+                          <td><%= userTicket.agent.user.first_name %> <%= userTicket.agent.user.last_name %></td>
+                          <td><%= userTicket.agent.staff_id %></td>
+                          <td>
+
+                            <% if (userTicket.status !== 'CLOSED') {%>
+                            <button
+                              type="button"
+                              class="btn-chat"
+                              data-bs-toggle="tooltip"
+                              data-bs-placement="top"
+                              title="Start conversation"
+                              onclick="openChatModal('<%= userTicket.ticket_id %>', '<%= userTicket.description %>', '<%= userTicket.created_at %>')"
+                              >
+                              <i class="fa-solid fa-comment"></i>
+                            </button>
+                            <%}%>
+
+                            <% if (userTicket.ratings === 0 || userTicket.status !== 'CLOSED') {%> 
+                            <button
+                             type="button"
+                             class="btn-rate"
+                             data-bs-toggle="tooltip"
+                             data-bs-placement="top"
+                             title="Rate ticket"
+                             onclick="openRatingModal('<%= userTicket.ticket_id %>')">
+                              <i class="fa-solid fa-star"></i>
+                            </button>
+                            <%}%> 
+                          </td>
+                        </tr>
+                      <%})%>
+
+                      <!--PAGINATION -->
+                      <div class="pagination">
+                        <div class="pagination_wrapper">
+                          <% if (current_page > 1) {%>
+                            <button class="pagination-first">
+                              <a href="/dashboard/client/ticket/?page=<%= current_page - 1 %>">
+                                <i class="fa-solid fa-chevron-left"></i>
+                              </a>
+                          </button>
+                          <%}%>
+        
+                          <% for (let i = 1; i <= total_pages; i++){%>
+                            <% if (i === current_page){%>
+                              <button class="pagination-item"><%= i %></button>
+                            <%}else{%>
+                              <button class="pagination-item">
+                                <a href="/dashboard/client/ticket/?page=<%=i%>"><%= i %></a>
+                              </button>
+                            <%}%>
+        
+                          <%}%>
+        
+                          <% if (current_page < total_pages){%>
+        
+                            <button class="pagination-last">
+                              <a href="/dashboard/client/ticket/?page=<%= current_page + 1 %>">
+                                <i class="fa-solid fa-chevron-right"></i>
+                              </a>
+                            </button>
+        
+                          <%}%> 
+                        </div>
+                      </div>
+                      <!-- PAGINATION -->
+
+                    <%}else if (search_results.length>0){%>
+
+                        <% search_results.forEach(search_result => {%>
+                          <tr>
+                            <td><%= search_result.ticket_id %></td>
+                            <td><%= search_result.subject %></td>
+                            <td><%= search_result.description.substring(0, 20)%>...</td>
+                            <td>
+                              <span class="ticket-priority <%= search_result.priority.toLowerCase() %>">
+                                <%= search_result.priority %>
+                              </span>
+                            </td>                            
+                            <td><%= search_result.status %></td>
+                            <td><%= search_result.agent.user.first_name %> <%= userTicket.agent.user.last_name %></td>
+                            <td><%= search_result.agent.staff_id %></td>
+                            <td>
+
+                              <% if (userTicket.status !== 'CLOSED') {%>
+                              <button
+                                type="button"
+                                class="btn-chat"
+                                data-bs-toggle="tooltip"
+                                data-bs-placement="top"
+                                title="Start conversation"
+                                onclick="openChatModal('<%= search_result.ticket_id %>', '<%= search_result.description %>', '<%= search_result.created_at %>')">
+                                <i class="fa-solid fa-comment"></i>
+                              </button>
+                              <%}%>
+
+                              <% if (search_result.ratings === 0 || userTicket.status !== 'CLOSED') {%> 
+                              <button
+                               type="button"
+                               class="btn-rate"
+                               data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               title="Rate ticket"
+                               onclick="openRatingModal('<%= search_result.ticket_id %>')">
+                                <i class="fa-solid fa-star"></i>
+                              </button>
+                              <%}%>
+                            </td>
+                          </tr>
+                        <%})%>
+
+                       <!--PAGINATION -->
+                       <div class="pagination">
+                        <div class="pagination_wrapper">
+                          <% if (current_page > 1) {%>
+                            <button class="pagination-first">
+                              <a href="/dashboard/client/ticket/?page=<%= current_page - 1 %>">
+                                <i class="fa-solid fa-chevron-left"></i>
+                              </a>
+                          </button>
+                          <%}%>
+        
+                          <% for (let i = 1; i <= total_pages; i++){%>
+                            <% if (i === current_page){%>
+                              <button class="pagination-item"><%= i %></button>
+                            <%}else{%>
+                              <button class="pagination-item">
+                                <a href="/dashboard/client/ticket/?page=<%=i%>"><%= i %></a>
+                              </button>
+                            <%}%>
+        
+                          <%}%>
+        
+                          <% if (current_page < total_pages){%>
+        
+                            <button class="pagination-last">
+                              <a href="/dashboard/client/ticket/?page=<%= current_page + 1 %>">
+                                <i class="fa-solid fa-chevron-right"></i>
+                              </a>
+                            </button>
+        
+                          <%}%> 
+                        </div>
+                      </div>
+                      <!-- PAGINATION -->
+
+                    <%} else {%>
+                        <h3>No Tickets</h3>
+                    <%}%>
+                    <!-- end of if -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <% if (error.length > 0) {%>
+            <div id="error-msg">
+              <i class="fa fa-times-circle"></i>
+              <%= error %>
+            </div>
+          <%}else{%>
+            <div id="error-msg"></div>
+          <%}%>
+  
+          <% if (success.length > 0){%>
+            <div id="success-msg">
+              <i class="fa fa-check"></i>
+              <%= success %>
+            </div>
+          <%}%>
+
+          <% if (info.length > 0){%>
+            <div id="info-msg">
+              <i class="fa fa-info-circle"></i>
+              <%= info %>
+            </div>
+          <%}%>
+
+        </div>
+      </div>
+    </main>
+
+    <!-- Modals -->
+
+    <!-- Add Ticket Modal -->
+
+    <div class="popup" id="addModal">
+      <div class="popup__content">
+        <div class="popup-header">
+          <h5 class="">Add Ticket</h5>
+          <button type="button" class="btn-close close"></button>
+        </div>
+
+        <div class="popup-body">
+          <form action="/dashboard/client/ticket" method="POST" class="modal-form">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <div class="form_group">
+              <label for="title">Title</label>
+              <input type="text" name="title" placeholder="Subject of ticket" id="title" required/>
+            </div>
+            <div class="form_group">
+              <label for="desc">Description</label>
+              <textarea
+                name="desc"
+                id="desc"
+                cols="30"
+                rows="10"
+                placeholder="Write Something..." required></textarea>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4 align-items-center">
+              <button type="button" class="btn btn-cancel" id="close_button">Cancel</button>
+              <button type="submit" class="btn btn-submit">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Client Chat Modal -->
+
+    <div class="popup" id="chatModal">
+      <div class="popup__content">
+        <div class="chat__popup-header">
+          <div class="image">
+            <img src="/img/circle-user-duotone.svg" alt="user" />
+          </div>
+          <h3 id="chatTitle"></h3>
+
+          <!-- Close chatbot button -->
+          <button type="button" class="chat__popup-close close">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="chat__dashboard">
+          <div class="chat__popup-main" id="messages"></div>
+          <div class="chat__popup-bottom">
+            <textarea
+              name="message"
+              id="client"
+              placeholder="Write something..." required></textarea>
+            <div class="buttons">
+              <label for="attach" class="btn__attach">
+                <i class="fa-solid fa-paperclip"></i>
+                <input type="file" name="image" id="attach" />
+              </label>
+              <button class="btn__send" id="send">
+                <i class="fa-solid fa-paper-plane"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ratings -->
+    <div class="popup" id="ratingModal">
+      <div class="popup__content">
+        <div class="popup-header">
+          <h5 class="">Rate our Service</h5>
+          <button type="button" class="btn-close close"></button>
+        </div>
+
+        <form action="/dashboard/rate/ticket" method="POST" id="rating-form">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+          <div class="rating">
+            <div class="rating-item">
+              <input type="radio" name="rating" id="1" value="1" />
+              <label for="1">1 <i class="fa-solid fa-star"></i></label>
+            </div>
+            <div class="rating-item">
+              <input type="radio" name="rating" id="2" value="2" />
+              <label for="2">2 <i class="fa-solid fa-star"></i></label>
+            </div>
+            <div class="rating-item">
+              <input type="radio" name="rating" id="3" value="3" />
+              <label for="3">3 <i class="fa-solid fa-star"></i></label>
+            </div>
+            <div class="rating-item">
+              <input type="radio" name="rating" id="4" value="4" />
+              <label for="4">4 <i class="fa-solid fa-star"></i></label>
+            </div>
+            <div class="rating-item">
+              <input type="radio" name="rating" id="5" value="5" />
+              <label for="5">5 <i class="fa-solid fa-star"></i></label>
+            </div>
+            <div class="rating-item">
+              <input type="radio" name="rating" id="6" value="6" />
+              <label for="6">6 <i class="fa-solid fa-star"></i></label>
+            </div>
+            <div class="rating-item">
+              <input type="radio" name="rating" id="7" value="7" />
+              <label for="7">7 <i class="fa-solid fa-star"></i></label>
+            </div>
+            <div class="rating-item">
+              <input type="radio" name="rating" id="8" value="8" />
+              <label for="8">8 <i class="fa-solid fa-star"></i></label>
+            </div>
+            <div class="rating-item">
+              <input type="radio" name="rating" id="9" value="9" />
+              <label for="9">9 <i class="fa-solid fa-star"></i></label>
+            </div>
+            <div class="rating-item">
+              <input type="radio" name="rating" id="10" value="10" />
+              <label for="10">10 <i class="fa-solid fa-star"></i></label>
+            </div>
+          </div>
+
+          <div
+            class="d-flex justify-content-center align-item-center gap-4 p-4 mt-4">
+            <button type="submit" class="btn btn-rate-confirm">
+              Submit Rating
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

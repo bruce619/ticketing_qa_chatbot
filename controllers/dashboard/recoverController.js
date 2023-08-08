@@ -1,7 +1,8 @@
 const { otpTimestamp, getRandomAlphanumericString } = require('../../utility/utils');
 const { mailObject, transporter } = require('../../config/email_config');
 const User = require('../../models/user');
-const { forgotPasswordSchema, passwordResetSchema } = require('../../utility/validations');
+const { forgotPasswordSchema, passwordResetSchema, tokenSchema } = require('../../utility/validations');
+
 
 // forget password page 
 exports.forgotPasswordView = async (req, res) => {
@@ -55,11 +56,11 @@ exports.processForgotPassword = async (req, res) => {
         transporter.sendMail(mailOptions, function(err, data) {
             if (err) {
               console.log("Error " + err);
-              res.redirect("/login")
+              res.redirect("/dashboard/login")
               return
             } else {
               req.flash("success", "Password reset link has been sent to your email")
-              res.redirect("/login")
+              res.redirect("/dashboard/login")
               return
             }
           });
@@ -67,7 +68,7 @@ exports.processForgotPassword = async (req, res) => {
     })
     .catch((err)=>{
         console.error(err)
-        res.redirect("/login")
+        res.redirect("/dashboard/login")
     })
 }
 
@@ -92,7 +93,7 @@ exports.createNewPasswordView = async (req, res) => {
     })
     .catch((err)=>{
         console.error(err)
-        res.redirect('/login');
+        res.redirect('/dashboard/login');
     })
 
 }
@@ -111,9 +112,6 @@ exports.processCreateNewPassword = async (req, res) => {
         return
     }
 
-    // delete confirm_password
-    delete value.confirm_password
-
     value.password = hashPassword(value.password)
 
     User.query().findOne({reset_password_token: value.token})
@@ -127,19 +125,19 @@ exports.processCreateNewPassword = async (req, res) => {
         user.$query().patch({password: value.password})
         .then(()=>{
             req.flash("success", "Password Reset Successful")
-            res.redirect("/login")
+            res.redirect("/dashboard/login")
             return
         })
         .catch((err)=>{
             console.error(err)
-            res.redirect("/login")
+            res.redirect("/dashboard/login")
             return
         })
 
     })
     .catch((err)=>{
         console.error(err)
-        res.redirect("/login")
+        res.redirect("/dashboard/login")
     })
 
     

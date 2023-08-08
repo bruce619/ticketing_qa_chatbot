@@ -1,7 +1,6 @@
 // Imports
 const config = require('./config/config');
 const express = require('express');
-const bodyParser = require('body-parser');
 const flash = require('connect-flash');
 const flashMessages = require('./middleware/flash_messages');
 const { csrfProtection, createCsrfToken, checkCsrfToken, csrfTokenErrorHandler } = require('./middleware/csrf_middleware');
@@ -35,9 +34,8 @@ app.use(cookieParser())
 app.use(session)
 
 
-// cors origin
 // set CORS Origin
-// app.use(cors({credentials: true, origin: ['http://localhost:3000']}));
+app.use(cors({credentials: true, origin: ['http://localhost:3000']}));
 
 
 // custom csrf protection middleware
@@ -55,9 +53,12 @@ app.use(file_upload.single('image'))
 
 
 // import routes
-app.use('/', require('./routes/bot'));
 app.use('/', require('./routes/auth'));
+app.use('/', require('./routes/bot'));
 app.use('/', require('./routes/otp'));
+app.use('/', require('./routes/staff'));
+app.use('/', require('./routes/client'));
+app.use('/', require('./routes/recover'));
 
 // RUN APP
 

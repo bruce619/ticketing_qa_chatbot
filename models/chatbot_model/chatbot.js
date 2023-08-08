@@ -46,7 +46,6 @@ async function preprocessTextInput(textInput, model, loadedTokenizer, input_shap
 }
 
 
-
 async function getResponse(textInput){
 
     const model = await loadModel()

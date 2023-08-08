@@ -10,7 +10,7 @@ class User extends Model {
 
     // method to get full name
     fullName() {
-        return this.firstName + ' ' + this.lastName;
+        return this.first_name + ' ' + this.last_name;
     }
 
     static get relationMappings() {

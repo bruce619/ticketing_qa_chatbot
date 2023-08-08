@@ -12,6 +12,7 @@
 				"Heyy",
 				"yo",
 				"Hi there",
+				"Hey there",
 				"Good morning",
 				"Good afternoon",
 				"Good evening",
@@ -89,7 +90,92 @@
         },
 		{
             "tag": "noanswer",
-            "input": [""],
+            "input": [
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					"",
+					""
+			],
             "responses": [
                 "Sorry, can't understand you...",
                 "Please give me more info...",
@@ -116,6 +202,10 @@
 				"online shoping store",
 				"Where can I shop for products",
 				"show me the link to the online store",
+				"I would like to know where I can purchase some of your products",
+				"I would like to know where I can buy some of your products",
+				"Tell me where I can purchase your products",
+				"Show me where I can buy some of your chemical products",
 				"Show me where to buy your products",
 				"What is the online store",
 				"shop for products",
@@ -369,6 +459,8 @@
 			"Give me details about your company",
 			"What exactly does your company do?",
 			"When was your company created?",
+			"Tell me more about your company",
+			"I am trying to know more about your company",
 			"Tell me more about your company",
 			"Tell me about the company",
 			"Where is the company located",
@@ -791,7 +883,7 @@
 				"getting invoices from last month"
 			],
 			"responses": [
-				"To get invoice for your order and purchase \ngo to the online web store \ngo to orders page \nselect previous orders or current order \nchoose the order you want an invoice for. If you have already tried this and it doesn't work, you can raise a complaint about getting an invoice for your order on the <a href='/dashboard/login' target='_blank'>dashboard ticketing system</a> and someone will pick up the case."
+				"To get invoice for your order and purchase \ngo to the online web store \ngo to orders page \nselect previous orders or current order \nchoose and view the details of the order you want an invoice for \n print invoice. If you have already tried this and it doesn't work, you can raise a complaint about getting an invoice for your order on the <a href='/dashboard/login' target='_blank'>dashboard ticketing system</a> and someone will pick up the case."
 			]
 		},
 		 {
@@ -1128,6 +1220,10 @@
 			"Can you solve my payment issues",
 			"payment issues",
 			"I tried paying but experience issues",
+			"I have been experiencing payment issues anytime I try to pay for something I purchased online",
+			"Kindly assist me with my payment problems",
+			"My card gets rejected anytime I try to pay for what I have ordered online",
+			"My card is getting declined",
 			"Experiencing payment issues",
 			"Can't seem to pay",
 			"Can't seem to make payemnt",
@@ -1159,6 +1255,7 @@
 			"I would like to report an issue with payments",
 			"I do not know how I can report an issue with payment",
 			"could you help me to report issues with payment?",
+			"It seems like your online store is not accepting my payment",
 			"what do I need to do to report an issue with payment?",
 			"can you help me solving issues with payment?",
 			"help to report an issue with payments",
@@ -1482,6 +1579,7 @@
 			"input": [
 			"Cancel",
 			"cancel order",
+			"Experiencing issues canceling my orders",
 			"Cancel my order",
 			"My order should be canceled",
 			"I can't cancel my order",
@@ -1810,7 +1908,7 @@
 			"could you help me to cancel my last order?"
 			],
 		 "responses": [
-			"I understand your concern and apologize for the inconviences. If you are unable to cancel your order yourself on the online shopping platform, you can login to the <a href='/dashboard/login' target='_blank'>dashboard ticketing system</a> to raise a complaint ticket your complaint and we will connect an agent to your case. Don't forget to add important information like order id and any relevant infomation that will enable the agent assist you"
+			"I understand your concern and apologize for the inconviences. To cancel order \ngo to the online web store \ngo to orders page \nselect the order you want to cancel \nClick on cancel order \nSelect the items you want to cancel \nGive cancellation reasons. If you are unable to cancel your order yourself on the online shopping platform, you can login to the <a href='/dashboard/login' target='_blank'>dashboard ticketing system</a> to raise a complaint ticket your complaint and we will connect an agent to your case. Don't forget to add important information like order id and any relevant infomation that will enable the agent assist you"
 		 ]
 		},
 		{
@@ -2855,7 +2953,7 @@
 				
 			],
 			"responses": [
-				"I apologize for the inconviences. Log into the ticketing system (dashboard) if you aren't already to seeing if your ticket/case has been closed (you can see this with the ticket id). If your ticket has been closed or you did not receive a ticket, a new ticket will have to be created to address your issues. Sorry for the inconviences. <a href='/dashboard/login' target='_blank'>cbi dashboard</a>"
+				"I apologize for the inconviences. Log into the ticketing system (dashboard) if you aren't already to seeing if your ticket/case has been closed (you can see this on the dashboard). If your ticket has been closed or you did not receive a ticket, a new ticket will have to be created to address your issues or call the customer service line, 0740-1486-7531, provide the ticket id as shown on the dashboard and they will help you reopen the ticket. Sorry for the inconviences. <a href='/dashboard/login' target='_blank'>cbi dashboard</a>"
 			]
 		},
 		{
@@ -3977,12 +4075,12 @@
 				"What are the current promotions for loyal customers?"
 			],
 			"responses": [
-				"As per costumer reviews we recommend you to try Lysol All-Purpose Cleaner. Check for more deals and offerings on the online web store at ",
+				"As per costumer reviews we recommend you to try Lysol All-Purpose Cleaner. Check for more deals and offerings on the online web store at <a href='/store' target='_blank'>Web Store</a>",
 				"You can check out our Glass cleaner Sprayway Glass Cleaner. Check for more deals and offerings on the online web store at ",
-				"Clorox Disinfecting Spray is liked by most of the costumers that love Disinfectant spray. Check for more deals and offerings on the online web store at ",
-				"You definitely should try Pledge Revitalizing Oil it is one of our maintenance chemicals. Check for more deals and offerings on the online web store at ",
-				"You will never regret trying Brasso Metal Polish for Brass, Copper, Stainless Steel. Check for more deals and offerings on the online web store at ",
-				"Visit our online store to see our specials for this month. There are also some great cleaning and maintenance chemicals available there. Check for more deals and offerings on the online web store at "
+				"Clorox Disinfecting Spray is liked by most of the costumers that love Disinfectant spray. Check for more deals and offerings on the online web store at <a href='/store' target='_blank'>Web Store</a>",
+				"You definitely should try Pledge Revitalizing Oil it is one of our maintenance chemicals. Check for more deals and offerings on the online web store at <a href='/store' target='_blank'>Web Store</a>",
+				"You will never regret trying Brasso Metal Polish for Brass, Copper, Stainless Steel. Check for more deals and offerings on the online web store at <a href='/store' target='_blank'>Web Store</a>",
+				"Visit our online store to see our specials for this month. There are also some great cleaning and maintenance chemicals available there. Check for more deals and offerings on the online web store at <a href='/store' target='_blank'>Web Store</a>"
 			]
 		},
 		{
