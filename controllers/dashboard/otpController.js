@@ -23,7 +23,7 @@ exports.otpView = async (req, res) => {
         res.render('dashboard/login', {error: 'Error occured when processing this. Try again', csrfToken: req.csrfToken()})
         return
     }else{
-        res.render("otp", {user: userExists.id, csrfToken: req.csrfToken()});
+        res.render("dashboard/otp", {user: userExists.id, csrfToken: req.csrfToken()});
     } // end if
 
 }
@@ -79,13 +79,10 @@ exports.processOTP = async (req, res) => {
 
     if (type === 'client'){
         req.flash('success', `Client Login Successful`)
-        res.redirect("/dashboard/client/home")
-    } else if (type === 'admin'){
-        req.flash('success', `Admin Login Successful`)
-        res.redirect("/dashboard/admin/home")
-    }else if (type === 'agent' ){
-        req.flash('success', `Agent Login Successful`)
-        res.redirect("/dashboard/agent/home")
+        res.redirect("/dashboard/client/ticket")
+    } else if (type === 'admin' || type === 'agent'){
+        req.flash('success', `Login Successful`)
+        res.redirect("/dashboard/home")
     }
 
 }

@@ -24,15 +24,15 @@ function generateRandomSessionId(){
 
 
 
-  async function checkUserType(userId) {
+  async function checkUserType(User, userId) {
     const user = await User.query()
       .findById(userId)
       .withGraphFetched('[client, agent]')
       .modifyGraph('client', (builder) => {
-        builder.select('id');
+        builder.select('user_id');
       })
       .modifyGraph('agent', (builder) => {
-        builder.select('id', 'is_admin');
+        builder.select('user_id', 'is_admin');
       });
   
     if (user.client && !user.agent) {

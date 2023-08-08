@@ -28,7 +28,7 @@ function createCsrfToken(req, res, next){
 function csrfTokenErrorHandler (err, req, res, next) {
     if (err.code !== 'EBADCSRFTOKEN') return next(err)
     // handle CSRF token errors here
-    res.status(403).send("Session has exired or form tampered with")
+    res.render("dashboard/login", {success: "", info: "", error: "Session ended or csrf token tempered with", csrfToken: req.csrfToken()})
   }
 
 

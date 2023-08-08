@@ -38,7 +38,7 @@ module.exports = session({
 
       // session time out: session max age in miliseconds (10 min)
       // Calculates the Expires Set-Cookie attribute
-      maxAge: 1000 * 60 * 10,
+      maxAge: 1000 * 60 * 15,
 
     }
   })

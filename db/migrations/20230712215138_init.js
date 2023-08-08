@@ -23,24 +23,18 @@ exports.up = function(knex) {
         table.uuid('user_id').primary().unique().notNullable().references('id').inTable('users').onDelete('CASCADE');
         table.string('staff_id', 10).unique().index();
         table.boolean('is_admin').defaultTo(false);
-        table.string('department').checkIn(['IT', 'SALES', 'ACCOUNT', 'BUSINESS']).nullable();
+        table.string('department').checkIn(['IT', 'SALES', 'ACCOUNT', 'BUSINESS', 'GENERAL']).nullable();
         table.timestamp('updated_at').defaultTo(knex.fn.now());
-
-        // Add a primary key constraint using the user_id column
-        // table.primary('user_id');
       })
       .createTable('clients', function(table) {
         table.uuid('user_id').primary().unique().notNullable().references('id').inTable('users').onDelete('CASCADE');
         table.string('location', 100);
         table.string('phone', 15);
         table.timestamp('updated_at').defaultTo(knex.fn.now());
-
-        // Add a primary key constraint using the user_id column
-        // table.primary('user_id');
       })
       .createTable('tickets', function (table) {
         table.uuid('id').defaultTo(knex.raw('gen_random_uuid ()')).primary();
-        table.string('ticket_id', 200).index();
+        table.string('ticket_id', 200).unique().index();
         table.uuid('agent_id').references('user_id').inTable('agents');
         table.uuid('client_id').notNullable().references('user_id').inTable('clients');
         table.string('subject');
@@ -55,15 +49,16 @@ exports.up = function(knex) {
         .defaultTo(0)
         .checkIn([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
         table.timestamp('created_at').defaultTo(knex.fn.now());
-        table.timestamp('updated_at').defaultTo(knex.fn.now());
+        table.timestamp('updated_at').nullable();
       })
     .createTable('conversations', function (table){
         table.increments('id').primary();
         table.uuid('ticket_id').notNullable().references('id').inTable('tickets');
         table.uuid('user_id').notNullable().references('id').inTable('users');
+        table.string('user_role');
         table.text('message').notNullable();
         table.string('image').nullable();
-        table.timestamp('created_at').defaultTo(knex.fn.now());
+        table.timestamp('sent_at').defaultTo(knex.fn.now());
     })
 };
 

@@ -17,8 +17,22 @@
       integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
       crossorigin="anonymous" />
 
+    <!-- JS Bootstrap -->
+    <script
+    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous" defer></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+    integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+    crossorigin="anonymous" defer></script>
+
     <!-- custom css -->
     <link rel="stylesheet" href="/css/main.css" />
+
+    <!-- custom js -->
+    <script src="/js/chatbot/botresponses.js" defer></script>
+    <script src="/js/chatbot/chatbot.js" defer></script>
 
   </head>
   <body>
@@ -31,10 +45,10 @@
           <div class="navigation__actions">
             <div class="navigation__actions-links">
               <a href="/">Home</a>
-              <a href="/">Online Store</a>
+              <a href="#">Online Store</a>
             </div>
             <div class="navigation__actions-buttons">
-              <a href="/login" target="_blank" class="btn btn__signup">Dashboard</a>
+              <a href="/dashboard/login" target="_blank" class="btn btn__signup">Dashboard</a>
             </div>
           </div>
         </div>
@@ -46,7 +60,7 @@
             Lorem ipsum dolor, adipisicing elit.
           </p>
         </div>
-        <a href="/store" class="btn btn__primary btn-lg">Discover Our Products</a>
+        <a href="#" class="btn btn__primary btn-lg">Discover Our Products</a>
       </div>
     </header>
     <main class="main">
@@ -323,14 +337,4 @@
       </div>
     </div>
   </body>
-  <script src="/js/botresponses.js"></script>
-  <script src="/js/chatbot.js"></script>
-  <script
-    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-    crossorigin="anonymous"></script>
-  <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
-    integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
-    crossorigin="anonymous"></script>
 </html>

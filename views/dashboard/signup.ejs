@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="/css/main.css" />
 
     <!-- custom js -->
-    <script src="/js/utils.js" defer></script>
+    <script src="/js/dashboard/utils.js" defer></script>
 
   </head>
   <body>
@@ -35,7 +35,7 @@
             <a href="#products">Online Store</a>
           </div>
           <div class="navigation__actions-buttons">
-            <a href="/login" class="btn btn__signup">Dashboard</a>
+            <a href="/dashboard/login" class="btn btn__signup">Dashboard</a>
           </div>
         </div>
       </div>
@@ -44,7 +44,7 @@
     <main class="signup">
       <div class="signup__container">
         <h4>Create an account</h4>
-        <form action="/signup" method="POST" class="signup__form" id="signup">
+        <form action="/dashboard/signup" method="POST" class="signup__form" id="signup">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
           <div class="form_group">
             <label for="firstname">Firstname</label>
@@ -87,16 +87,30 @@
               placeholder="******" />
           </div>
           <button type="submit" class="btn btn__submit">Sign up</button>
-          <small>Already have an account? <a href="/login">Log in</a></small>
+          <small>Already have an account? <a href="/dashboard/login">Log in</a></small>
         </form>
 
-        <% if (error.length > 0) { %>
+        <% if (error.length > 0) {%>
           <div id="error-msg">
             <i class="fa fa-times-circle"></i>
             <%= error %>
           </div>
         <%}else{%>
           <div id="error-msg"></div>
+        <%}%>
+
+        <% if (success.length > 0){%>
+          <div id="success-msg">
+            <i class="fa fa-check"></i>
+            <%= success %>
+          </div>
+        <%}%>
+
+        <% if (info.length > 0){%>
+          <div id="info-msg">
+            <i class="fa fa-info-circle"></i>
+            <%= info %>
+          </div>
         <%}%>
 
 

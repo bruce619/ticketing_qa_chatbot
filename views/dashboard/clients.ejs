@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clients</title>
+
+    <!-- Font awsome Kit -->
+    <script src="https://kit.fontawesome.com/62765ee528.js" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous" />
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"></script>
+
+      <!-- custom css -->
+    <link rel="stylesheet" href="/css/dashboard.css" />
+
+    <!-- custom js -->
+    <script src="/js/dashboard/dashboard.js" defer></script>
+    <script src="/js/dashboard/clients.js" defer></script>
+
+  </head>
+  <body>
+    <main class="dashboard">
+      <div class="sidebar">
+        <div class="sidebar_top">
+          <h4>Ticketing System</h4>
+        </div>
+        <div class="sidebar_main">
+          <div class="user">
+            <div class="user_image">
+              <img src="/img/user.png" alt="avatar" />
+            </div>
+            <div class="user_info">
+              <h5><%= current_user.fullName() %></h5>
+              <p><%= current_user.email %></p>
+            </div>
+          </div>
+          <div class="sidebar_links">
+            <span class="sidebar_link">
+              <a href="/dashboard/home"><i class="fa-solid fa-gauge"></i> Dashboard</a>
+            </span>
+            <% if (user_role === 'admin') {%>
+              <span class="sidebar_link">
+                <a href="/dashboard/create/agent"><i class="fa-solid fa-users"></i> Agents</a>
+              </span>
+            <%}%>
+            <span class="sidebar_link active">
+              <a href="/dashboard/create/client"><i class="fa-solid fa-users"></i> Clients</a>
+            </span>
+
+            <span class="sidebar_link">
+              <% if (user_role === 'admin') {%>
+              <a href="/dashboard/admin/ticket"><i class="fa-solid fa-ticket"></i> Tickets</a>
+              <%}else if (user_role === 'agent') {%>
+                <a href="/dashboard/agent/ticket"><i class="fa-solid fa-ticket"></i> Tickets</a>
+              <%}%>
+            </span>
+
+            <span class="sidebar_link">
+              <a href="/dashboard/reports"><i class="fa-solid fa-file-pen"></i> Report</a>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="main_content">
+        <div class="main_content-top">
+          <button
+            type="button"
+            class="sidebar_collapse-btn btn"
+            id="toggleSidebar">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="user">
+            <div class="user_info">
+              <a href="/dashboard/staff/edit-profile">Edit Profile</a>
+              <a href="/dashboard/logout">Sign Out</a>
+            </div>
+          </div>
+        </div>
+        <div class="main_content-main">
+          <div class="dashboard_title">
+            <h2>Clients Table</h2>
+            <div class="dashboard_title-nav">
+              <i class="fa-solid fa-gauge"></i>
+              <small>Home </small>
+              <small><i class="fa-solid fa-chevron-right"></i></small>
+              <small>Clients</small>
+            </div>
+          </div>
+          <div class="dashboard_content">
+            <div class="dashboard_agents">
+              <button type="button" class="btn btn-add" id="addButton">
+                <i class="fa-solid fa-user-plus"></i>Add
+              </button>
+
+              <div class="search_container">
+                <form action="/dashboard/create/client" method="GET" class="search_input">
+                  <input type="text" id="search" name="search" placeholder="Search" required/>
+                  <button type="submit">Search</button>
+                </form>
+              </div>
+
+              <div class="dashboard_agents-table table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">First Name</th>
+                      <th scope="col">Last Name</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Location</th>
+                      <th scope="col">Phone no.</th>
+                      <th scope="col">Password</th>
+                      <th scope="col">Edit</th>
+                    </tr>
+                  </thead>
+
+                  <tbody id="client-table" class="table-body">
+
+                    <% if (clients.length>0){%>
+                    
+                      <% clients.forEach(client => {%>
+                        <tr>
+                          <td><%= client.first_name %></td>
+                          <td><%= client.last_name %></td>
+                          <td><%= client.email %></td>
+                          <td><%= client.client.location %></td>
+                          <td><%= client.client.phone %></td>
+                          <td>***********</td>
+                          <td>
+                            <button type="button" class="btn-edit">
+                              <i class="fa-solid fa-pen"></i>
+                            </button>
+                        </td>
+                        </tr>
+                      <%})%>
+
+                      <!--PAGINATION -->
+                      <div class="pagination">
+                        <div class="pagination_wrapper">
+                          <% if (current_page > 1) {%>
+                            <button class="pagination-first">
+                              <a href="/dashboard/create/client/?page=<%= current_page - 1 %>">
+                                <i class="fa-solid fa-chevron-left"></i>
+                              </a>
+                          </button>
+                          <%}%>
+        
+                          <% for (let i = 1; i <= total_pages; i++){%>
+                            <% if (i === current_page){%>
+                              <button class="pagination-item"><%= i %></button>
+                            <%}else{%>
+                              <button class="pagination-item">
+                                <a href="/dashboard/create/client/?page=<%=i%>"><%= i %></a>
+                              </button>
+                            <%}%>
+        
+                          <%}%>
+        
+                          <% if (current_page < total_pages){%>
+        
+                            <button class="pagination-last">
+                              <a href="/dashboard/create/client/?page=<%= current_page + 1 %>">
+                                <i class="fa-solid fa-chevron-right"></i>
+                              </a>
+                            </button>
+        
+                          <%}%> 
+                        </div>
+                      </div>
+                      <!-- PAGINATION -->
+
+                    <%}else if (search_results.length>0){%>
+
+                        <% search_results.forEach(search_result => {%>
+                          <tr>
+                            <td><%= search_result.first_name %></td>
+                            <td><%= search_result.last_name %></td>
+                            <td><%= search_result.email %></td>
+                            <td><%= search_result.client.location %></td>
+                            <td><%= search_result.client.phone %></td>
+                            <td>***********</td>
+                            <td>
+                              <button type="button" class="btn-edit">
+                                <i class="fa-solid fa-pen"></i>
+                              </button>
+                          </td>
+                          </tr>
+                        <%})%>
+
+                      <!--PAGINATION -->
+                      <div class="pagination">
+                        <div class="pagination_wrapper">
+                          <% if (current_page > 1) {%>
+                            <button class="pagination-first">
+                              <a href="/dashboard/create/client/?page=<%= current_page - 1 %>">
+                                <i class="fa-solid fa-chevron-left"></i>
+                              </a>
+                          </button>
+                          <%}%>
+        
+                          <% for (let i = 1; i <= total_pages; i++){%>
+                            <% if (i === current_page){%>
+                              <button class="pagination-item"><%= i %></button>
+                            <%}else{%>
+                              <button class="pagination-item">
+                                <a href="/dashboard/create/client/?page=<%=i%>"><%= i %></a>
+                              </button>
+                            <%}%>
+        
+                          <%}%>
+        
+                          <% if (current_page < total_pages){%>
+        
+                            <button class="pagination-last">
+                              <a href="/dashboard/create/client/?page=<%= current_page + 1 %>">
+                                <i class="fa-solid fa-chevron-right"></i>
+                              </a>
+                            </button>
+        
+                          <%}%> 
+                        </div>
+                      </div>
+                      <!-- PAGINATION -->
+
+                    <%} else {%>
+                        <h3>No Clients</h3>
+                    <%}%>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <% if (error.length > 0) {%>
+              <div id="error-msg">
+                <i class="fa fa-times-circle"></i>
+                <%= error %>
+              </div>
+            <%}else{%>
+              <div id="error-msg"></div>
+            <%}%>
+    
+            <% if (success.length > 0){%>
+              <div id="success-msg">
+                <i class="fa fa-check"></i>
+                <%= success %>
+              </div>
+            <%}%>
+  
+            <% if (info.length > 0){%>
+              <div id="info-msg">
+                <i class="fa fa-info-circle"></i>
+                <%= info %>
+              </div>
+            <%}%>
+
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Modals -->
+
+    <!-- Add Client Modal -->
+
+    <div class="popup" id="addModal">
+      <div class="popup__content">
+        <div class="popup-header">
+          <h5 class="">Add Client</h5>
+          <button type="button" class="btn-close close"></button>
+        </div>
+
+        <div class="popup-body">
+          <form action="/dashboard/create/client" method="POST" class="modal-form">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <div class="form_group">
+              <label for="firstname">Firstname</label>
+              <input
+                type="text"
+                name="first_name"
+                id="firstname"
+                placeholder="John" />
+            </div>
+            <div class="form_group">
+              <label for="lastname">Lastname</label>
+              <input
+                type="text"
+                name="last_name"
+                id="lastname"
+                placeholder="Doe" />
+            </div>
+            <div class="form_group">
+              <label for="email">Email</label>
+              <input
+                type="email"
+                name="email"
+                placeholder="johndoe@email.com"
+                id="email" />
+            </div>
+
+            <div class="d-flex justify-content-center mt-4 align-items-center">
+              <button type="submit" class="btn btn-submit w-100">
+                Add Client
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Client Modal -->
+
+    <div class="popup" id="editModal">
+      <div class="popup__content">
+        <div class="popup-header">
+          <h5 class="">Edit Client</h5>
+          <button type="button" class="btn-close close"></button>
+        </div>
+
+        <div class="popup-body">
+          <form action="/dashboard/edit/client-info" method="POST" class="modal-form">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <div class="form_group">
+              <label for="edit_firstname">Firstname</label>
+              <input
+                type="text"
+                name="first_name"
+                id="edit_firstname"
+                />
+            </div>
+            <div class="form_group">
+              <label for="edit_lastname">Lastname</label>
+              <input
+                type="text"
+                name="last_name"
+                id="edit_lastname"
+                />
+            </div>
+            <div class="form_group">
+              <label for="edit_email">Email</label>
+              <input
+                type="email"
+                name="email"
+                id="edit_email" readonly/>
+            </div>
+
+            <div class="form_group">
+              <label for="edit_location">Location</label>
+              <input
+                type="text"
+                name="location"
+                id="edit_location"
+                required/>
+            </div>
+
+            <div class="form_group">
+              <label for="edit_phone">Phone no.</label>
+              <input
+                type="text"
+                name="phone"
+                id="edit_phone"
+                required/>
+            </div>
+
+            <div class="d-flex justify-content-center mt-4 align-items-center">
+              <button type="submit" class="btn btn-submit w-100">
+                Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>
