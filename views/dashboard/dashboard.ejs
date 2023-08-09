@@ -39,6 +39,7 @@
               <p><%= current_user.email %></p>
             </div>
           </div>
+
           <div class="sidebar_links">
             <span class="sidebar_link active">
               <a href="/dashboard/home">
@@ -64,8 +65,10 @@
               <a href="/dashboard/reports"><i class="fa-solid fa-file-pen"></i> Report</a>
             </span>
           </div>
+
         </div>
       </div>
+      
       <div class="main_content">
         <div class="main_content-top">
           <button
@@ -119,6 +122,43 @@
                   </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
+                  <div class="dashboard_stats tickets">
+                    <h2 class="dashboard_stats-amount"><%= openTicketCount %></h2>
+                    <p class="dashboard_stats-title">Open Tickets</p>
+                    <span class="dashboard_stats-icon"
+                      ><i class="fa-solid fa-ticket"></i
+                    ></span>
+                    <a href="#" class="dashboard_stats-link"
+                      >More info <i class="fa-solid fa-circle-arrow-right"></i
+                    ></a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="dashboard_stats agents">
+                    <h2 class="dashboard_stats-amount"><%= inprogressTicketCount %></h2>
+                    <p class="dashboard_stats-title">Tickets In Progress</p>
+                    <span class="dashboard_stats-icon"
+                      ><i class="fa-solid fa-users"></i
+                    ></span>
+                    <a href="#" class="dashboard_stats-link"
+                      >More info <i class="fa-solid fa-circle-arrow-right"></i
+                    ></a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="dashboard_stats clients">
+                    <h2 class="dashboard_stats-amount"><%= closedTicketCount %></h2>
+                    <p class="dashboard_stats-title">Closed Tickets</p>
+                    <span class="dashboard_stats-icon"
+                      ><i class="fa-solid fa-users"></i
+                    ></span>
+                    <a href="#" class="dashboard_stats-link"
+                      >More info <i class="fa-solid fa-circle-arrow-right"></i
+                    ></a>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
                   <div class="dashboard_stats agents">
                     <h2 class="dashboard_stats-amount"><%= totalAgents %></h2>
                     <p class="dashboard_stats-title">Total Agents</p>
@@ -141,6 +181,41 @@
                       >More info <i class="fa-solid fa-circle-arrow-right"></i
                     ></a>
                   </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="dashboard_stats today">
+                    <h2 class="dashboard_stats-amount"><%= lowPriorityCount %></h2>
+                    <p class="dashboard_stats-title">Low Priority Tickets</p>
+                    <span class="dashboard_stats-icon"
+                      ><i class="fa-solid fa-ticket"></i
+                    ></span>
+                    <a href="#" class="dashboard_stats-link"
+                      >More info <i class="fa-solid fa-circle-arrow-right"></i
+                    ></a>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                  <div class="dashboard_stats agents">
+                    <h2 class="dashboard_stats-amount"><%= mediumPriorityCount %></h2>
+                    <p class="dashboard_stats-title">Medium Priority Tickets</p>
+                    <span class="dashboard_stats-icon"
+                      ><i class="fa-solid fa-users"></i
+                    ></span>
+                    <a href="#" class="dashboard_stats-link"
+                      >More info <i class="fa-solid fa-circle-arrow-right"></i
+                    ></a>
+                  </div>
+              </div>
+              <div class="col-lg-3 col-md-6">
+                <div class="dashboard_stats clients">
+                  <h2 class="dashboard_stats-amount"><%= highPriorityCount %></h2>
+                  <p class="dashboard_stats-title">High Priority Tickets</p>
+                  <span class="dashboard_stats-icon"
+                    ><i class="fa-solid fa-users"></i
+                  ></span>
+                  <a href="#" class="dashboard_stats-link"
+                    >More info <i class="fa-solid fa-circle-arrow-right"></i
+                  ></a>
                 </div>
               </div>
             </div>

@@ -36,7 +36,6 @@ const createChatItem = (data) => {
 };
 
 
-
 const handleSendMessage = async () => {
   const error_msg = document.querySelector('#error-msg');
 
@@ -65,20 +64,20 @@ const handleSendMessage = async () => {
     });
 
     if (response.ok) {
-
-
-      // Assuming the response is the updated conversation data
       const updatedConversation = await response.json();
 
       // Clear the messages container before updating
       messagesContainer.innerHTML = '';
+
+      // Create the first client message again
+      firstClientMessage({ ticketDescription, ticketDescriptionTimeStamp });
 
       // Loop through the updated conversation data and create chat items
       updatedConversation.forEach(convo => {
         const chatItem = createChatItem({
           message: convo.message,
           image: convo.image,
-          timestamp: getTimestampFromDate(String(convo.sent_at)), // Update this based on your response data
+          timestamp: getTimestampFromDate(String(convo.sent_at)),
           messageType: convo.user_role === 'client' ? 'sender' : 'receiver',
         });
 
@@ -87,14 +86,13 @@ const handleSendMessage = async () => {
         }
       });
 
- 
     } else {
       error_msg.textContent = "Failed to send message. Ticket might be closed"
       console.error('Failed to send message.');
       return
     }
   } catch (error) {
-    error_msg.textContent = `Error sending message:, ${error}`
+    error_msg.textContent = `Error sending message: ${error}`
     console.error('Error sending message:', error);
     return
   }
@@ -102,6 +100,74 @@ const handleSendMessage = async () => {
   chatInput.value = '';
   attachInput.value = ''; // Reset file input
 };
+
+
+// const handleSendMessage = async () => {
+//   const error_msg = document.querySelector('#error-msg');
+
+//   const userMessage = chatInput.value.trim();
+//   if (!userMessage) return;
+
+//   const messageData = {
+//     message: userMessage,
+//     ticketId: currentTicketId,
+//   };
+
+//   if (attachInput.files.length > 0) {
+//     const imageFile = attachInput.files[0];
+//     const imageBase64 = await getBase64Image(imageFile);
+//     messageData.image = imageBase64;
+//   }
+
+//   try {
+//     const response = await fetch('/api/send-message', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//         'X-CSRF-Token': csrfToken,
+//       },
+//       body: JSON.stringify(messageData),
+//     });
+
+//     if (response.ok) {
+
+
+//       // Assuming the response is the updated conversation data
+//       const updatedConversation = await response.json();
+      
+
+//       // Clear the messages container before updating
+//       messagesContainer.innerHTML = '';
+
+//       // Loop through the updated conversation data and create chat items
+//       updatedConversation.forEach(convo => {
+//         const chatItem = createChatItem({
+//           message: convo.message,
+//           image: convo.image,
+//           timestamp: getTimestampFromDate(String(convo.sent_at)), // Update this based on your response data
+//           messageType: convo.user_role === 'client' ? 'sender' : 'receiver',
+//         });
+
+//         if (chatItem) {
+//           messagesContainer.appendChild(chatItem);
+//         }
+//       });
+
+ 
+//     } else {
+//       error_msg.textContent = "Failed to send message. Ticket might be closed"
+//       console.error('Failed to send message.');
+//       return
+//     }
+//   } catch (error) {
+//     error_msg.textContent = `Error sending message:, ${error}`
+//     console.error('Error sending message:', error);
+//     return
+//   }
+
+//   chatInput.value = '';
+//   attachInput.value = ''; // Reset file input
+// };
 
 
 // Get timestam of new Messages

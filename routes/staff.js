@@ -2,7 +2,8 @@ const { dashboardHomeView, staffProfileView, processClientSignUp,
     processAgentSignUp, processStaffProfileUpdate, reports, 
     createAgentView, createClientView, adminTicketView, 
     processAdminTickets, agentTicketView, processAgentTickets, 
-    staffEditClient, adminEditAgent, getAgentEmails, processAdminEditTickets, processAgentEditTickets} = require('../controllers/dashboard/staffController');
+    staffEditClient, adminEditAgent, getAgentEmails, 
+    processAdminEditTickets, processAgentEditTickets, getReportStatus, getAgentTicketRatings} = require('../controllers/dashboard/staffController');
 const loginRequired = require('../middleware/auth_middleware');
 const express = require('express');
 const router = express.Router();
@@ -25,6 +26,8 @@ router.get('/dashboard/agent/ticket', loginRequired("agent"), agentTicketView);
 router.post('/dashboard/agent/ticket', loginRequired("agent"), processAgentTickets);
 router.post('/dashboard/agent/edit-ticket', loginRequired("agent"), processAgentEditTickets);
 router.get('/dashboard/reports', loginRequired("admin", "agent"),  reports);
+router.get('/api/tickets/status/:ticketStatus',  getReportStatus);
+router.get('/api/tickets/ratings/:ratings',  getAgentTicketRatings);
 
 
 module.exports = router;
