@@ -66,14 +66,20 @@ exports.getConversations = async (req, res) => {
 
 exports.sendMessage = async (req, res) => {
 
+    if (req.file === undefined){
+        req.file = {}
+      }
+
+
+    if ('filename' in req.file){
+    const image = '/' + 'uploads' + '/' + req.file.filename
+    req.body.image = image
+    }else {
+        req.body.image = null
+    }
+
     // remove the csrf token for the req body
     delete req.body._csrf
-
-    if (!('image' in req.body)){
-        req.body.image = null;
-      }else{
-        req.body.image = req.body.image
-      }
 
     const userRole = req.session.role
     const user = req.session.userId
@@ -85,6 +91,8 @@ exports.sendMessage = async (req, res) => {
         res.status(500).json({ error: 'An error occurred while saving conversation.' });
         return
     }
+
+    console.log(value)
 
     const getTicket = await Ticket.query().where('ticket_id', value.ticketId).first()
 

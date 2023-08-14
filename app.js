@@ -24,7 +24,7 @@ app.set('views', './views');
 app.set('view engine', 'ejs');
 
 // Middleware to parse JSON data
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 // Middleware to parse URL-encoded data
 app.use(express.urlencoded({ extended: true }));
 

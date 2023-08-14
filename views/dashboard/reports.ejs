@@ -2,12 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reports</title>
 
     <!-- Font awsome Kit -->
-    <script
-      src="https://kit.fontawesome.com/62765ee528.js"
-      crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/62765ee528.js" crossorigin="anonymous"></script>
 
     <!-- Bootstrap CDN -->
 
@@ -26,7 +26,6 @@
     <script src="/js/dashboard/dashboard.js" defer></script>
     <script src="/js/dashboard/reports.js" defer></script>
 
-    <title>Document</title>
   </head>
   <body>
     <main class="dashboard">
@@ -36,40 +35,41 @@
         </div>
         <div class="sidebar_main">
           <div class="user">
-            <div class="user_image"><img src="" alt="" /></div>
+            <div class="user_image">
+              <img src="/img/user.png" alt="avatar" />
+            </div>
             <div class="user_info">
-              <h5>John Doe</h5>
-              <p>johndo@email.com</p>
+              <h5><%= current_user.fullName() %></h5>
+              <p><%= current_user.email %></p>
             </div>
           </div>
-          <div class="sidebar_links">
-            <span class="sidebar_link">
-              <a href="./dashboard.html"
-                ><i class="fa-solid fa-gauge"></i> Dashboard</a
-              >
-            </span>
-            <span class="sidebar_link">
-              <a href="./agents.html"
-                ><i class="fa-solid fa-users"></i> Agents</a
-              >
-            </span>
-            <span class="sidebar_link">
-              <a href="./clients.html"
-                ><i class="fa-solid fa-users"></i> Clients</a
-              >
-            </span>
 
-            <span class="sidebar_link">
-              <a href="./tickets.html"
-                ><i class="fa-solid fa-ticket"></i> Tickets</a
-              >
-            </span>
+          <div class="sidebar_links">
             <span class="sidebar_link active">
-              <a href="./reports.html"
-                ><i class="fa-solid fa-file-pen"></i> Report</a
-              >
+              <a href="/dashboard/home">
+                <i class="fa-solid fa-gauge"></i> Dashboard
+                </a>
+            </span>
+            <% if (user_role === 'admin') {%>
+              <span class="sidebar_link">
+                <a href="/dashboard/create/agent"><i class="fa-solid fa-users"></i> Agents</a>
+              </span>
+            <%}%>
+            <span class="sidebar_link">
+              <a href="/dashboard/create/client"><i class="fa-solid fa-users"></i> Clients</a>
+            </span>
+            <span class="sidebar_link">
+              <% if (user_role === 'admin') {%>
+              <a href="/dashboard/admin/ticket"><i class="fa-solid fa-ticket"></i> Tickets</a>
+              <%}else if (user_role === 'agent') {%>
+                <a href="/dashboard/agent/ticket"><i class="fa-solid fa-ticket"></i> Tickets</a>
+              <%}%>
+            </span>
+            <span class="sidebar_link">
+              <a href="/dashboard/reports"><i class="fa-solid fa-file-pen"></i> Report</a>
             </span>
           </div>
+
         </div>
       </div>
       <div class="main_content">
@@ -81,10 +81,9 @@
             <i class="fa-solid fa-bars"></i>
           </button>
           <div class="user">
-            <div class="user_image"><img src="" alt="" /></div>
             <div class="user_info">
-              <h5>John Doe</h5>
-              <a href="./editprofile.html">Edit Profile</a>
+              <a href="/dashboard/staff/edit-profile">Edit Profile</a>
+              <a href="/dashboard/logout">Sign Out</a>
             </div>
           </div>
         </div>
@@ -98,32 +97,33 @@
               <small>Reports</small>
             </div>
           </div>
+
+
           <div class="dashboard_content">
             <div class="dashboard_reports">
               <div class="reports_main">
-                <h6>All Tickets</h6>
-                <ul class="tickets_list"></ul>
-              </div>
-              <div class="reports_charts">
-                <h6>Charts</h6>
+                <h6>Agents Performance Chart</h6>
+
                 <div class="reports_charts-stats tickets-stats">
                   <div class="filter_container">
                     <label>Filter by:</label>
                     <div>
                       <select id="ticketStatus" class="form-select">
-                        <option value="open">Open</option>
-                        <option value="closed">Closed</option>
+                        <option selected>Select an option</option>
+                        <option value="OPEN">Open</option>
+                        <option value="IN_PROGRESS">In Progress</option>
+                        <option value="CLOSED">Closed</option>
                       </select>
                     </div>
                   </div>
                   <canvas id="ticket-stats"></canvas>
                 </div>
-                <div class="reports_charts-stats users-stats">
-                  <canvas id="users-stats"></canvas>
-                </div>
+                
               </div>
             </div>
           </div>
+
+
         </div>
       </div>
     </main>

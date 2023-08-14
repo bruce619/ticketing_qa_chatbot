@@ -4,8 +4,8 @@ const Joi = require('joi');
 const passwordPattern = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()]).{8,}$/
 const otpPattern = /^\d{6}$/
 const uuidPattern = /^[a-zA-Z0-9-]+$/i
-const searchPattern = /^[a-zA-Z0-9][a-zA-Z0-9,:.\s]*$/;
-const generalTextPattern = /^[a-zA-Z0-9][a-zA-Z0-9,.!;:"?+=#@*-_\s]+$/;
+const searchPattern = /^[a-zA-Z0-9][a-zA-Z0-9,.'!;:"?+=#@$%&()*-_\s]*$/;
+const generalTextPattern = /^[a-zA-Z0-9][a-zA-Z0-9,.'!;:"?+=#@$%&()*-_\s]+$/;
 const tokenPattern = /^[a-zA-Z0-9]+$/i
 const namePattern = /^[A-Za-z]/
 const capsPattern = /^[A-Z]+$/
@@ -63,7 +63,7 @@ exports.loginSchema = Joi.object({
 
 exports.rateTicketSchema = Joi.object({
   ticketId: Joi.string().regex(/^[A-Z0-9]+$/).required(),
-  rating: Joi.string().regex(/^(10|[1-9])$/)
+  rating: Joi.string().regex(/^(10|[1-9])$/).required()
 })
 
 
@@ -146,8 +146,6 @@ exports.editAdminTicketSchema = Joi.object({
 });
 
 
-
-
 exports.userSearchSchema = Joi.object({
     search: Joi.string()
       .pattern(RegExp(searchPattern))
@@ -196,7 +194,7 @@ exports.clientCreateTicketSchema = Joi.object({
     .min(1)
     .required()
     .messages({
-        'string.pattern.base': 'Invalid Title.'
+        'string.pattern.base': 'Invalid Characters detected. Make title as simple as possible'
     }),
   desc: Joi.string().min(2)
   .pattern(RegExp(generalTextPattern))

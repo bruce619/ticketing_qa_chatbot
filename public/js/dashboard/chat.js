@@ -3,6 +3,7 @@ const chatInput = document.querySelector('.chat__popup-bottom textarea');
 const sendBtn = document.getElementById('send');
 const attachInput = document.getElementById('attach')
 
+
 // Create and append a chat item
 const createChatItem = (data) => {
   const { message, image, timestamp, messageType } = data;
@@ -20,7 +21,15 @@ const createChatItem = (data) => {
   timestampSpan.textContent = timestamp;
 
   if (image) {
-    chatparagraph.insertBefore(imageElement, chatparagraph.firstChild);
+    // Create an anchor element for the image
+    const imageLink = document.createElement('a');
+    imageLink.href = image; // Set the href to the image source
+    imageLink.target = '_blank'; // Open in a new tab
+
+    // Append the image element to the anchor
+    imageLink.appendChild(imageElement);
+
+    chatparagraph.insertBefore(imageLink, chatparagraph.firstChild);
   }
 
   if (messageType === 'sender') {
@@ -36,6 +45,38 @@ const createChatItem = (data) => {
 };
 
 
+//Create and append a chat item
+// const createChatItem = (data) => {
+//   const { message, image, timestamp, messageType } = data;
+
+//   const chatElement = document.createElement('div');
+//   const imageElement = document.createElement('img');
+//   const userImage = document.createElement('img');
+//   const chatparagraph = document.createElement('p');
+//   const timestampSpan = document.createElement('span');
+
+//   imageElement.src = image;
+//   userImage.src = '/img/circle-user-duotone.svg';
+
+//   chatparagraph.textContent = message;
+//   timestampSpan.textContent = timestamp;
+
+//   if (image) {
+//     chatparagraph.insertBefore(imageElement, chatparagraph.firstChild);
+//   }
+
+//   if (messageType === 'sender') {
+//     chatElement.classList.add('chat__message', 'chat__message-sender');
+//     chatElement.appendChild(chatparagraph);
+//     chatElement.appendChild(timestampSpan);
+//   } else if (messageType === 'receiver') {
+//     chatElement.classList.add('chat__message', 'chat__message-receiver');
+//     chatElement.innerHTML = `${userImage.outerHTML}${chatparagraph.outerHTML}${timestampSpan.outerHTML}`;
+//   }
+
+//   return chatElement; // Return the created chat item
+// };
+
 
 const handleSendMessage = async () => {
   const error_msg = document.querySelector('#error-msg');
@@ -43,42 +84,40 @@ const handleSendMessage = async () => {
   const userMessage = chatInput.value.trim();
   if (!userMessage) return;
 
-  const messageData = {
-    message: userMessage,
-    ticketId: currentTicketId,
-  };
+  const formData = new FormData();
+  formData.append('message', userMessage);
+  formData.append('ticketId', currentTicketId);
 
   if (attachInput.files.length > 0) {
-    const imageFile = attachInput.files[0];
-    const imageBase64 = await getBase64Image(imageFile);
-    messageData.image = imageBase64;
+    console.log(attachInput.files[0])
+    formData.append('image', attachInput.files[0]);
   }
 
   try {
+
     const response = await fetch('/api/send-message', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         'X-CSRF-Token': csrfToken,
       },
-      body: JSON.stringify(messageData),
+      body: formData,
     });
 
     if (response.ok) {
-
-
-      // Assuming the response is the updated conversation data
       const updatedConversation = await response.json();
 
       // Clear the messages container before updating
       messagesContainer.innerHTML = '';
+
+      // Create the first client message again
+      firstClientMessage({ ticketDescription, ticketDescriptionTimeStamp });
 
       // Loop through the updated conversation data and create chat items
       updatedConversation.forEach(convo => {
         const chatItem = createChatItem({
           message: convo.message,
           image: convo.image,
-          timestamp: getTimestampFromDate(String(convo.sent_at)), // Update this based on your response data
+          timestamp: getTimestampFromDate(String(convo.sent_at)),
           messageType: convo.user_role === 'client' ? 'sender' : 'receiver',
         });
 
@@ -87,14 +126,13 @@ const handleSendMessage = async () => {
         }
       });
 
- 
     } else {
-      error_msg.textContent = "Failed to send message. Ticket might be closed"
+      error_msg.textContent = "Failed to send message."
       console.error('Failed to send message.');
       return
     }
   } catch (error) {
-    error_msg.textContent = `Error sending message:, ${error}`
+    error_msg.textContent = `Error sending message: ${error}`
     console.error('Error sending message:', error);
     return
   }
@@ -103,6 +141,22 @@ const handleSendMessage = async () => {
   attachInput.value = ''; // Reset file input
 };
 
+// Function to convert an image file to base64
+const getBase64Image = async (imageFile) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      resolve(event.target.result);
+    };
+
+    reader.onerror = (error) => {
+      reject(error);
+    };
+
+    reader.readAsDataURL(imageFile);
+  });
+}
 
 // Get timestam of new Messages
 const getMessageTime = () => {

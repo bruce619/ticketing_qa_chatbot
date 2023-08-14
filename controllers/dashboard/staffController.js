@@ -25,7 +25,16 @@ exports.dashboardHomeView = async (req, res) => {
       
         const totalTicketsToday = parseInt(totalTicketsForToday.totalTickets, 10);
         console.log('Total tickets for today:', totalTicketsToday);
+
+        // STATUS
+        const openTicketCount = await Ticket.query().where('status', 'OPEN').resultSize();        
+        const closedTicketCount = await Ticket.query().where('status', 'CLOSED').resultSize();        
+        const inprogressTicketCount = await Ticket.query().where('status', 'IN_PROGRESS').resultSize(); 
         
+        // PRIORITY
+        const lowPriorityCount = await Ticket.query().where('priority', 'LOW').resultSize();        
+        const mediumPriorityCount = await Ticket.query().where('priority', 'MEDIUM').resultSize();        
+        const highPriorityCount = await Ticket.query().where('priority', 'HIGH').resultSize(); 
 
         const user_id = req.session.userId
         const user_role = req.session.role
@@ -40,6 +49,12 @@ exports.dashboardHomeView = async (req, res) => {
             todaysTicketCount: totalTicketsToday,
             totalTickets: totalTickets,
             totalAgents: totalAgents,
+            openTicketCount: openTicketCount,
+            closedTicketCount: closedTicketCount,
+            inprogressTicketCount: inprogressTicketCount,
+            lowPriorityCount: lowPriorityCount,
+            mediumPriorityCount: mediumPriorityCount,
+            highPriorityCount: highPriorityCount,
             totalClients: totalClients,
             current_user: current_user,
             user_role: user_role,
@@ -92,12 +107,15 @@ exports.processStaffProfileUpdate = async (req, res) => {
         return
     }
 
+    const currentTime = new Date();
+
     try {
 
         current_user.first_name = value.first_name
         current_user.last_name = value.last_name
         current_user.email = value.email
         current_user.two_fa_enabled = value.two_fa_enabled
+        current_user.updated_at = currentTime
 
         // Update the agent fields
         if (current_user.agent) {
@@ -181,7 +199,13 @@ exports.createClientView = async (req, res) => {
                     todaysTicketCount: 0,
                     totalTickets: 0,
                     totalAgents: 0,
-                    totalClients: 0, 
+                    totalClients: 0,
+                    openTicketCount: 0,
+                    closedTicketCount: 0,
+                    inprogressTicketCount: 0,
+                    lowPriorityCount: 0,
+                    mediumPriorityCount: 0,
+                    highPriorityCount: 0, 
                     current_user: current_user, 
                     user_role: user_role, 
                     error: error.details[0].message, 
@@ -256,13 +280,21 @@ exports.staffEditClient = async (req, res) => {
             todaysTicketCount: 0,
             totalTickets: 0,
             totalAgents: 0,
-            totalClients: 0, 
+            totalClients: 0,
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0,   
             current_user: current_user, 
             user_role: user_role, 
             error: error.details[0].message, 
             csrfToken: req.csrfToken()})
         return
     }
+
+    const currentTime = new Date();
 
     try {
 
@@ -271,11 +303,13 @@ exports.staffEditClient = async (req, res) => {
         selected_client.first_name = value.first_name
         selected_client.last_name = value.last_name
         selected_client.email = value.email
+        selected_client.updated_at = currentTime
 
         // Update the client fields
         if (selected_client.client) {
             selected_client.client.location = value.location;
             selected_client.client.phone = value.phone;
+            selected_client.client.updated_at = currentTime
         }
 
         // Save the changes to the user and client tables
@@ -295,7 +329,13 @@ exports.staffEditClient = async (req, res) => {
             todaysTicketCount: 0,
             totalTickets: 0,
             totalAgents: 0,
-            totalClients: 0, 
+            totalClients: 0,
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0,   
             current_user: current_user, 
             user_role: user_role, 
             error: "An error occurred while updating client info", 
@@ -328,13 +368,21 @@ exports.adminEditAgent = async (req, res) => {
             todaysTicketCount: 0,
             totalTickets: 0,
             totalAgents: 0,
-            totalClients: 0, 
+            totalClients: 0,
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0,   
             current_user: current_user, 
             user_role: user_role, 
             error: error.details[0].message, 
             csrfToken: req.csrfToken()})
         return
     }
+
+    const currentTime = new Date();
 
     try {
 
@@ -343,11 +391,13 @@ exports.adminEditAgent = async (req, res) => {
         selected_agent.first_name = value.first_name
         selected_agent.last_name = value.last_name
         selected_agent.email = value.email
+        selected_agent.updated_at = currentTime
 
         // Update the agent fields
         if (selected_agent.agent) {
             selected_agent.agent.is_admin = value.is_admin;
             selected_agent.agent.department = value.department;
+            selected_agent.agent.updated_at = currentTime
         }
 
         // Save the changes to the user and agent tables
@@ -367,7 +417,13 @@ exports.adminEditAgent = async (req, res) => {
             todaysTicketCount: 0,
             totalTickets: 0,
             totalAgents: 0,
-            totalClients: 0, 
+            totalClients: 0,
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0,   
             current_user: current_user, 
             user_role: user_role, 
             error: "An error occurred while updating agent info", 
@@ -437,7 +493,13 @@ exports.createAgentView = async (req, res) => {
                     todaysTicketCount: 0,
                     totalTickets: 0,
                     totalAgents: 0,
-                    totalClients: 0, 
+                    totalClients: 0,
+                    openTicketCount: 0,
+                    closedTicketCount: 0,
+                    inprogressTicketCount: 0,
+                    lowPriorityCount: 0,
+                    mediumPriorityCount: 0,
+                    highPriorityCount: 0,   
                     current_user: current_user, 
                     user_role: user_role, 
                     error: error.details[0].message, 
@@ -517,7 +579,13 @@ exports.processClientSignUp = async (req, res) => {
             todaysTicketCount: 0,
             totalTickets: 0,
             totalAgents: 0,
-            totalClients: 0, 
+            totalClients: 0,
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0,   
             current_user: current_user, 
             user_role: user_role, 
             error: error.details[0].message, 
@@ -533,7 +601,13 @@ exports.processClientSignUp = async (req, res) => {
             todaysTicketCount: 0,
             totalTickets: 0,
             totalAgents: 0,
-            totalClients: 0, 
+            totalClients: 0,
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0,   
             current_user: current_user, 
             user_role: user_role, 
             error: "Account already exists.", 
@@ -564,7 +638,13 @@ exports.processClientSignUp = async (req, res) => {
             todaysTicketCount: 0,
             totalTickets: 0,
             totalAgents: 0,
-            totalClients: 0, 
+            totalClients: 0,
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0,   
             current_user: current_user, 
             user_role: user_role, 
             error: "Error creating client.", 
@@ -603,7 +683,13 @@ exports.processAgentSignUp = async (req, res) => {
             todaysTicketCount: 0,
             totalTickets: 0,
             totalAgents: 0,
-            totalClients: 0, 
+            totalClients: 0,
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0,   
             current_user: current_user, 
             user_role: user_role, 
             error: error.details[0].message, 
@@ -619,7 +705,13 @@ exports.processAgentSignUp = async (req, res) => {
         todaysTicketCount: 0,
         totalTickets: 0,
         totalAgents: 0,
-        totalClients: 0, 
+        totalClients: 0,
+        openTicketCount: 0,
+        closedTicketCount: 0,
+        inprogressTicketCount: 0,
+        lowPriorityCount: 0,
+        mediumPriorityCount: 0,
+        highPriorityCount: 0,   
         current_user: current_user, 
         user_role: user_role, 
         error: "Account creation failed.",
@@ -658,7 +750,13 @@ exports.processAgentSignUp = async (req, res) => {
             todaysTicketCount: 0,
             totalTickets: 0,
             totalAgents: 0,
-            totalClients: 0, 
+            totalClients: 0,
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0,   
             current_user: current_user, 
             user_role: user_role, 
             error: "Error creating agent.", 
@@ -815,7 +913,13 @@ exports.processAdminTickets = async (req, res) => {
             todaysTicketCount: 0,
             totalTickets: 0,
             totalAgents: 0,
-            totalClients: 0, 
+            totalClients: 0,
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0,   
             current_user: current_user, 
             user_role: user_role, 
             error: error.details[0].message,
@@ -830,7 +934,13 @@ exports.processAdminTickets = async (req, res) => {
             todaysTicketCount: 0,
             totalTickets: 0,
             totalAgents: 0,
-            totalClients: 0, 
+            totalClients: 0,
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0,   
             current_user: current_user, 
             user_role: user_role, 
             error: "This user doesn't exists or is not a client",
@@ -847,6 +957,12 @@ exports.processAdminTickets = async (req, res) => {
             totalTickets: 0,
             totalAgents: 0,
             totalClients: 0, 
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0, 
             current_user: current_user, 
             user_role: user_role, 
             error: "This client doesn't exists",
@@ -944,6 +1060,12 @@ exports.processAdminTickets = async (req, res) => {
             totalTickets: 0,
             totalAgents: 0,
             totalClients: 0,
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0, 
             current_user: current_user, 
             user_role: user_role, 
             error: "Error Creating Ticket", 
@@ -972,6 +1094,12 @@ exports.processAdminEditTickets = async (req, res) => {
             totalTickets: 0,
             totalAgents: 0,
             totalClients: 0,
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0, 
             current_user: current_user, 
             user_role: user_role, 
             error: error.details[0].message,
@@ -985,13 +1113,16 @@ exports.processAdminEditTickets = async (req, res) => {
 
     const agent = await User.query().where("email", value.email).first()
 
+    const currentTime = new Date();
+
     try {
 
     // Update the ticket priority and agent_id
     await Ticket.query().findById(ticket.id).patch({
         priority: value.priority,
         agent_id: agent.id,
-        status: value.status
+        status: value.status,
+        updated_at: currentTime
       });
       
       req.flash('success', 'Sucessfully Updated Ticket For client')
@@ -1004,6 +1135,12 @@ exports.processAdminEditTickets = async (req, res) => {
             totalTickets: 0,
             totalAgents: 0,
             totalClients: 0,
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0, 
             current_user: current_user, 
             user_role: user_role, 
             error: "error occured updating ticket",
@@ -1034,6 +1171,12 @@ exports.processAgentEditTickets = async (req, res) => {
             totalTickets: 0,
             totalAgents: 0,
             totalClients: 0,
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0, 
             current_user: current_user, 
             user_role: user_role, 
             error: error.details[0].message,
@@ -1048,13 +1191,16 @@ exports.processAgentEditTickets = async (req, res) => {
 
     const agent = await User.query().where("email", value.email).first()
 
+    const currentTime = new Date();
+
     try {
 
     // Update the ticket priority and agent_id
     await Ticket.query().findById(ticket.id).patch({
         priority: value.priority,
         agent_id: agent.id,
-        status: value.status
+        status: value.status,
+        updated_at: currentTime
       });
       
       req.flash('success', 'Sucessfully Updated Ticket For client')
@@ -1067,6 +1213,12 @@ exports.processAgentEditTickets = async (req, res) => {
             totalTickets: 0,
             totalAgents: 0,
             totalClients: 0,
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0, 
             current_user: current_user, 
             user_role: user_role, 
             error: "error occured updating ticket",
@@ -1191,7 +1343,13 @@ exports.processAgentTickets = async (req, res) => {
             todaysTicketCount: 0,
             totalTickets: 0,
             totalAgents: 0,
-            totalClients: 0, 
+            totalClients: 0,
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0,  
             current_user: current_user, 
             user_role: user_role, 
             error: error.details[0].message,
@@ -1206,7 +1364,13 @@ exports.processAgentTickets = async (req, res) => {
             todaysTicketCount: 0,
             totalTickets: 0,
             totalAgents: 0,
-            totalClients: 0, 
+            totalClients: 0,
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0, 
             current_user: current_user, 
             user_role: user_role, 
             error: "This user doesn't exists or is not a client",
@@ -1222,7 +1386,13 @@ exports.processAgentTickets = async (req, res) => {
             todaysTicketCount: 0,
             totalTickets: 0,
             totalAgents: 0,
-            totalClients: 0, 
+            totalClients: 0,
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0,  
             current_user: current_user, 
             user_role: user_role, 
             error: "This client doesn't exists",
@@ -1318,6 +1488,12 @@ exports.processAgentTickets = async (req, res) => {
             totalTickets: 0,
             totalAgents: 0,
             totalClients: 0,
+            openTicketCount: 0,
+            closedTicketCount: 0,
+            inprogressTicketCount: 0,
+            lowPriorityCount: 0,
+            mediumPriorityCount: 0,
+            highPriorityCount: 0, 
             current_user: current_user, 
             user_role: user_role, 
             error: "Error Creating Ticket", 
@@ -1331,8 +1507,58 @@ exports.processAgentTickets = async (req, res) => {
 // Report View For both Admin and Agent
 // method: GET
 exports.reports = async (req, res) => {
+
+    const user_id = req.session.userId
+    const user_role = req.session.role
+    const current_user = await User.query().findById(user_id).first()
+
+    res.render('dashboard/reports', {current_user: current_user, user_role: user_role, csrfToken: req.csrfToken()})
     
 }
+
+
+exports.getReportStatus = async (req, res) => {
+    const selectedStatus = req.params.ticketStatus
+    try {
+        const agentTicketCounts = await Agent.query()
+        .select('users.first_name', 'users.last_name')
+        .join('users', 'agents.user_id', '=', 'users.id')
+        .join('tickets', 'tickets.agent_id', '=', 'agents.user_id')
+        .count('tickets.id as count')
+        .where('tickets.status', selectedStatus)
+        .groupBy('users.first_name', 'users.last_name');
+  
+      const formattedCounts = agentTicketCounts.reduce((counts, agent) => {
+        const fullName = `${agent.first_name} ${agent.last_name}`;
+        counts[fullName] = parseInt(agent.count);
+        return counts;
+      }, {});
+
+      console.log(formattedCounts)
+  
+      res.json({ ticketsData: formattedCounts });
+    } catch (error) {
+      console.error('Error fetching agent ticket counts:', error);
+      res.status(500).json({ error: 'An error occurred while fetching agent ticket counts' });
+    }
+  };
+
+
+exports.getAgentTicketRatings = async (req, res) => {
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+    
 
 
 

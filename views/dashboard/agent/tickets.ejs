@@ -117,6 +117,7 @@
                       <th scope="col">Description</th>
                       <th scope="col">Priority</th>
                       <th scope="col">Status</th>
+                      <th scope="col">Ratings</th>
                       <th scope="col">Asigned Agent</th>
                       <th scope="col">Agent ID</th>
                       <th scope="col">Client</th>
@@ -130,7 +131,7 @@
                       <% userTickets.forEach(userTicket => {%>
                         <tr>
                           <td><%= userTicket.ticket_id %></td>
-                          <td><%= userTicket.subject %></td>
+                          <td><%= userTicket.subject.substring(0, 10)%>...</td>
                           <td><%= userTicket.description.substring(0, 20)%>...</td>
                           <td>
                             <span class="ticket-priority <%= userTicket.priority.toLowerCase() %>">
@@ -138,6 +139,7 @@
                             </span>
                           </td>
                           <td><%= userTicket.status %></td>
+                          <td><%= userTicket.ratings %></td>
                           <td><%= userTicket.agent.user.first_name %> <%= userTicket.agent.user.last_name %></td>
                           <td><%= userTicket.agent.staff_id %></td>
                           <td><%= userTicket.client.user.first_name %> <%= userTicket.client.user.last_name %></td>
@@ -205,7 +207,7 @@
                       <% search_results.forEach(search_result => {%>
                         <tr>
                           <td><%= search_result.ticket_id %></td>
-                          <td><%= search_result.subject %></td>
+                          <td><%= search_result.subject.substring(0, 10)%>...</td>
                           <td><%= search_result.description.substring(0, 20)%>...</td>
                           <td>
                             <span class="ticket-priority <%= search_result.priority.toLowerCase() %>">
@@ -213,6 +215,7 @@
                             </span>
                           </td>
                           <td><%= search_result.status %></td>
+                          <td><%= search_result.ratings %></td>
                           <td><%= search_result.agent.user.first_name %> <%= userTicket.agent.user.last_name %></td>
                           <td><%= search_result.agent.staff_id %></td>
                           <td><%= search_result.client.user.first_name %> <%= userTicket.client.user.last_name %></td>
@@ -398,7 +401,7 @@
             <div class="buttons">
               <label for="attach" class="btn__attach">
                 <i class="fa-solid fa-paperclip"></i>
-                <input type="file" id="attach" />
+                <input type="file" name="image" id="attach" accept=".jpg, .JPG, .png, .PNG, .jpeg, .JPEG"/>
               </label>
               <button class="btn__send" id="send">
                 <i class="fa-solid fa-paper-plane"></i>
