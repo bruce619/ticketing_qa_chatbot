@@ -63,7 +63,7 @@ exports.loginSchema = Joi.object({
 
 exports.rateTicketSchema = Joi.object({
   ticketId: Joi.string().regex(/^[A-Z0-9]+$/).required(),
-  rating: Joi.string().regex(/^(10|[1-9])$/)
+  rating: Joi.string().regex(/^(10|[1-9])$/).required()
 })
 
 
@@ -144,8 +144,6 @@ exports.editAdminTicketSchema = Joi.object({
   priority: Joi.string().pattern(RegExp(capsPattern)).required(),
   status: Joi.string().regex(/^[A-Z _-]+$/).required()
 });
-
-
 
 
 exports.userSearchSchema = Joi.object({
