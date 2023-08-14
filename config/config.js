@@ -6,7 +6,8 @@ const development = {
 
     app: {
         port: parseInt(process.env.DEV_APP_PORT),
-        environment: process.env.NODE_ENV
+        environment: process.env.NODE_ENV,
+        secret_key: process.env.SECRET_KEY
     },
 
     db: {
@@ -24,7 +25,8 @@ const production = {
 
     app: {
         port: parseInt(process.env.PROD_APP_PORT) || 3000,
-        environment: process.env.NODE_ENV
+        environment: process.env.NODE_ENV,
+        secret_key: process.env.SECRET_KEY
     },
 
     db: {

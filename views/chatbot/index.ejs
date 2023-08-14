@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="<%= csrfToken %>">
+    <title>Home</title>
+
+    <!-- Font awsome Kit -->
+    <script src="https://kit.fontawesome.com/62765ee528.js" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap CDN -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous" />
+
+    <!-- JS Bootstrap -->
+    <script
+    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous" defer></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+    integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+    crossorigin="anonymous" defer></script>
+
+    <!-- custom css -->
+    <link rel="stylesheet" href="/css/main.css" />
+
+    <!-- custom js -->
+    <script src="/js/chatbot/botresponses.js" defer></script>
+    <script src="/js/chatbot/chatbot.js" defer></script>
+
+  </head>
+  <body>
+    <header>
+      <nav class="navigation">
+        <div class="container">
+          <div class="navigation__brand">
+            <h5 class="text-bolder">CBI</h5>
+          </div>
+          <div class="navigation__actions">
+            <div class="navigation__actions-links">
+              <a href="/">Home</a>
+              <a href="#">Online Store</a>
+            </div>
+            <div class="navigation__actions-buttons">
+              <a href="/dashboard/login" target="_blank" class="btn btn__signup">Dashboard</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div class="header">
+        <div class="header__primary">
+          <h1 class="header__primary--main">CBI Cleaning and Maintenance Chemicals</h1>
+          <p class="header__primary--sub">
+            Lorem ipsum dolor, adipisicing elit.
+          </p>
+        </div>
+        <a href="#" class="btn btn__primary btn-lg">Discover Our Products</a>
+      </div>
+    </header>
+    <main class="main">
+      <!-- Features section -->
+      <div class="section section__features">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12 heading">
+              <h5 class="heading__small">Features</h5>
+              <h2 class="heading__main">Lorem, ipsum dolor.</h2>
+            </div>
+            <div class="col-lg-6 features__col">
+              <div class="feature__box">
+                <span class="feature__box-icon"
+                  ><i class="fa-solid fa-droplet"></i
+                ></span>
+                <div class="feature__box-text">
+                  <h4>Lorem ipsum dolor sit.</h4>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Esse, iusto!
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 features__col">
+              <div class="feature__box">
+                <span class="feature__box-icon"
+                  ><i class="fa-solid fa-droplet"></i
+                ></span>
+                <div class="feature__box-text">
+                  <h4>Lorem ipsum dolor sit.</h4>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Esse, iusto!
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6 features__col">
+              <div class="feature__box">
+                <span class="feature__box-icon"
+                  ><i class="fa-solid fa-droplet"></i
+                ></span>
+                <div class="feature__box-text">
+                  <h4>Lorem ipsum dolor sit.</h4>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Esse, iusto!
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 features__col">
+              <div class="feature__box">
+                <span class="feature__box-icon"
+                  ><i class="fa-solid fa-droplet"></i
+                ></span>
+                <div class="feature__box-text">
+                  <h4>Lorem ipsum dolor sit.</h4>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Esse, iusto!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- About secion  -->
+      <div class="section section__about">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-6 about__images">
+              <div class="about__image about__image-1">
+                <img
+                  src="/img/pexels-anna-shvets-5217901.jpg"
+                  alt=""
+                  srcset="" />
+              </div>
+              <div class="about__image about__image-2">
+                <img src="/img/header image.jpg" alt="" srcset="" />
+              </div>
+              <div class="about__image about__image-3">
+                <img
+                  src="/img/pexels-anna-shvets-5217896.jpg"
+                  alt=""
+                  srcset="" />
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="about__desc">
+                <h2 class="">More than just cleaning</h2>
+                <p>
+                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                  Officiis modi ducimus fugiat laboriosam praesentium facere
+                  eveniet illo accusamus fuga quae. Lorem, ipsum dolor sit amet
+                  consectetur adipisicing elit. Accusantium molestiae facere,
+                  quibusdam itaque odit optio!
+                </p>
+                <a href="#"
+                  >Learn more <i class="fa-solid fa-arrow-right"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section section__products">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12 heading">
+              <h5 class="heading__small">products</h5>
+              <h2 class="heading__main">Lorem, ipsum dolor.</h2>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <div class="product__card">
+                <div class="product__card-image">
+                  <img src="/img/pexels-anna-shvets-5217911.jpg" alt="" />
+                </div>
+                <div class="product__card-details">
+                  <h5>Lorem, ipsum dolor.</h5>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Velit, rem?
+                  </p>
+                  <a href="#" class="btn btn__primary">See Details</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <div class="product__card">
+                <div class="product__card-image">
+                  <img src="/img/pexels-anna-shvets-5217913.jpg" alt="" />
+                </div>
+                <div class="product__card-details">
+                  <h5>Lorem, ipsum dolor.</h5>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Velit, rem?
+                  </p>
+                  <a href="#" class="btn btn__primary">See Details</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <div class="product__card">
+                <div class="product__card-image">
+                  <img src="/img/pexels-anna-shvets-5217914.jpg" alt="" />
+                </div>
+                <div class="product__card-details">
+                  <h5>Lorem, ipsum dolor.</h5>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Velit, rem?
+                  </p>
+                  <a href="#" class="btn btn__primary">See Details</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+              <div class="product__card">
+                <div class="product__card-image">
+                  <img src="/img/pexels-anna-shvets-5217917.jpg" alt="" />
+                </div>
+                <div class="product__card-details">
+                  <h5>Lorem, ipsum dolor.</h5>
+                  <p>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Velit, rem?
+                  </p>
+                  <a href="#" class="btn btn__primary">See Details</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="row col-lg-4">
+            <h3>CBI Cleaning Service</h3>
+            <p>
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+              Officiis, distinctio.
+            </p>
+            <div class="footer__socials"></div>
+          </div>
+          <div class="row col-lg-4">
+            <h4 class="footer__header">Quick links</h4>
+            <ul class="footer__links">
+              <li class="footer__link-item"><a href="/about">About</a></li>
+              <li class="footer__link-item">Contact</li>
+              <li class="footer__link-item">Services</li>
+              <li class="footer__link-item">Privacy policy</li>
+              <li class="footer__link-item">Terms of service</li>
+            </ul>
+          </div>
+          <div class="row col-lg-4">
+            <h4 class="footer__header">News letter</h4>
+            <p>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus
+              amet animi optio error deleniti ut voluptatum.
+            </p>
+            <form class="newsletter_form">
+              <input type="text" /> <button type="submit">Submit</button>
+            </form>
+          </div>
+          <div class="col-lg-12 footer__bottom">
+            <p>copyright &copy; 2023. All rights reserved</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- CHATBOT SECTION -->
+
+    <!-- Open chatbot button -->
+    <label for="popup" class="chatbot__button"
+      ><i class="fa-solid fa-comments"></i
+    ></label>
+
+    <!-- Chatbot popup -->
+
+    <div class="chatbot">
+      <input
+        type="checkbox"
+        name="popup"
+        id="popup"
+        class="chatbot__checkbox" />
+      <div class="chatbot__popup">
+        <div class="chatbot__popup-header">
+          <div class="image">
+            <img src="/img/logo white.png" alt="" />
+          </div>
+          <h3>ChatBot</h3>
+
+          <!-- Close chatbot button -->
+          <label for="popup" class="chatbot__popup-close">
+            <i class="fa-solid fa-xmark"></i>
+          </label>
+        </div>
+        <div class="chatbot__popup-main" id="messages">
+          <div class="chatbot__message chatbot__message-bot">
+            <img src="/img/logo purple.png" alt="" />
+            <p id="firstMessage">
+              Loading...
+              <span>12:40 AM</span>
+            </p>
+          </div>
+        </div>
+        <div class="chatbot__popup-bottom">
+          <textarea name="" id="" placeholder="Write something..."></textarea>
+          <div class="buttons">
+            <!-- <label for="attach" class="btn__attach">
+              <i class="fa-solid fa-paperclip"></i>
+              <input type="file" id="attach" />
+            </label> -->
+            <button class="btn__send" id="send">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
