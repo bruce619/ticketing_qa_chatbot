@@ -5,7 +5,7 @@ const Agent = require('../../models/agent');
 const Ticket = require('../../models/ticket');
 const { clientSignUpSchema, agentSignUpSchema, staffProfileUpdateSchema, userSearchSchema, clientProfileUpdateSchema, agentCreateTicketSchema, editAdminTicketSchema } = require('../../utility/validations');
 const { hashPassword } = require('../../utility/helpers');
-const { generateStaffID, genPassword, generateRandomTicketId } = require('../../utility/utils');
+const { generateStaffID, genPassword, generateRandomTicketId, getRandomAlphanumericString, otpTimestamp } = require('../../utility/utils');
 const { getResponse } = require('../../models/chatbot_model/chatbot');
 const setupDB = require('../../db/db-setup');
 
@@ -16,7 +16,6 @@ setupDB();
 exports.dashboardHomeView = async (req, res) => {
 
         const today = new Date().toISOString().slice(0, 10);
-        console.log('Today:', today);
         
         const totalTicketsForToday = await Ticket.query()
         .count('id as totalTickets')
@@ -24,7 +23,6 @@ exports.dashboardHomeView = async (req, res) => {
         .first();
       
         const totalTicketsToday = parseInt(totalTicketsForToday.totalTickets, 10);
-        console.log('Total tickets for today:', totalTicketsToday);
 
         // STATUS
         const openTicketCount = await Ticket.query().where('status', 'OPEN').resultSize();        
@@ -241,8 +239,6 @@ exports.createClientView = async (req, res) => {
             .limit(page_size)
             .resultSize(); 
             
-            console.log(totalClients)
-
             total_pages = Math.ceil(totalClients / page_size);
 
             res.render('dashboard/clients', {
@@ -319,8 +315,25 @@ exports.staffEditClient = async (req, res) => {
         await selected_client.client.$query().patch();
         }
 
-        req.flash('success', 'Sucessfully updated client info')
-        res.redirect('/dashboard/create/client')
+        
+        const mailOptions = mailObject(
+            selected_client.email,
+            "Account Updated",
+            `Hi ${selected_client.first_name} your account has been updated`,
+            )
+
+        transporter.sendMail(mailOptions, function(err, data) {
+            if (err) {
+                console.log("Error " + err);
+                res.redirect("/dashboard/home")
+                return
+            } else {
+                req.flash('success', 'Sucessfully updated client info')
+                res.redirect('/dashboard/create/client')
+                return
+            }
+            });
+
 
 
     } catch (err) {
@@ -407,8 +420,23 @@ exports.adminEditAgent = async (req, res) => {
         await selected_agent.agent.$query().patch();
         }
 
-        req.flash('success', 'Sucessfully updated agent info')
-        res.redirect('/dashboard/create/agent')
+        const mailOptions = mailObject(
+            selected_agent.email,
+            "Account Updated",
+            `Hi ${selected_agent.first_name} your account has been updated`,
+            )
+
+        transporter.sendMail(mailOptions, function(err, data) {
+            if (err) {
+                console.log("Error " + err);
+                res.redirect("/dashboard/home")
+                return
+            } else {
+                req.flash('success', 'Sucessfully updated agent info')
+                res.redirect('/dashboard/create/agent')
+                return
+            }
+            });
 
 
     } catch (err) {
@@ -615,8 +643,6 @@ exports.processClientSignUp = async (req, res) => {
         return 
     }
 
-    console.log(`client password ${value.password}`)
-
     // hash the user password
     value.password = hashPassword(value.password)
 
@@ -628,9 +654,49 @@ exports.processClientSignUp = async (req, res) => {
         // create the client profile
         await Client.query().insert({user_id: newClient.id})
 
-        req.flash('success', `${newClient.first_name} account has been created`)
-        req.flash('info', 'The client credential will be sent via email')
-        res.redirect("/dashboard/create/client")
+
+        // set reset token and expiry time
+        const reset_token = getRandomAlphanumericString(30)
+        const reset_token_expiry_time = otpTimestamp()
+
+        newClient.reset_password_token = reset_token;
+        newClient.reset_password_expiry_time = reset_token_expiry_time;
+
+        newClient.$query().patch({
+            reset_password_token: newClient.reset_password_token,
+            reset_password_expiry_time: newClient.reset_password_expiry_time
+        }).then(()=>{
+
+            // password reset link
+        const password_reset_link = `${req.protocol}://${req.get('host')}/dashboard/reset-password/${newClient.id}/${reset_token}/`;
+        
+        console.log(password_reset_link)
+        
+        const mailOptions = mailObject(
+            newClient.email,
+            "Account Created",
+            `Hi ${newClient.first_name} your account has been created. Click on this link to create your new password: ${password_reset_link}`,
+            )
+
+
+        transporter.sendMail(mailOptions, function(err, data) {
+            if (err) {
+              console.log("Error " + err);
+              res.redirect("/dashboard/home")
+              return
+            } else {
+                req.flash('success', `${newClient.first_name} account has been created`)
+                req.flash('info', 'The client will be notifield via email')
+                res.redirect("/dashboard/create/client")
+              return
+            }
+          });
+
+        }).catch((err)=>{
+        console.error(err)
+        res.redirect("/dashboard/home")
+    })
+
 
     } catch (err){
         console.error(err)
@@ -719,8 +785,6 @@ exports.processAgentSignUp = async (req, res) => {
         return 
     }
 
-    console.log(`agent password ${value.password}`)
-
     // hash the user password
     value.password = hashPassword(value.password)
 
@@ -734,15 +798,54 @@ exports.processAgentSignUp = async (req, res) => {
 
     try {
 
-        // insert client into the user table
+        // insert agent into the user table
         const newAgent =  await User.query().insert({first_name: value.first_name, last_name: value.last_name, email: value.email, password: value.password})
 
-        // create the client profile
+        // create the agent profile
         await Agent.query().insert({user_id: newAgent.id, staff_id: staff_id, is_admin: value.is_admin, department: value.department})
 
-        req.flash('success', `${newAgent.first_name} account has been created with staff id ${staff_id}`)
-        req.flash('info', 'An email with teh creential will be sent')
+
+        // set reset token and expiry time
+        const reset_token = getRandomAlphanumericString(30)
+        const reset_token_expiry_time = otpTimestamp()
+
+        newAgent.reset_password_token = reset_token;
+        newAgent.reset_password_expiry_time = reset_token_expiry_time;
+
+        newAgent.$query().patch({
+            reset_password_token: newAgent.reset_password_token,
+            reset_password_expiry_time: newAgent.reset_password_expiry_time
+        }).then(()=>{
+
+            // password reset link
+        const password_reset_link = `${req.protocol}://${req.get('host')}/dashboard/reset-password/${newAgent.id}/${reset_token}/`;
+        
+        console.log(password_reset_link)
+        
+        const mailOptions = mailObject(
+            newAgent.email,
+            "Create Your Password",
+            `Your account has been created. Click on this link to create your new password: ${password_reset_link}`,
+            )
+
+        transporter.sendMail(mailOptions, function(err, data) {
+            if (err) {
+              console.log("Error " + err);
+              res.redirect("/dashboard/home")
+              return
+            } else {
+                req.flash('success', `${newAgent.first_name} account has been created with staff id ${staff_id}`)
+                req.flash('info', 'The agent will be notified via email')
+                res.redirect("/dashboard/home")
+              return
+            }
+          });
+
+        }).catch((err)=>{
+        console.error(err)
         res.redirect("/dashboard/home")
+    })
+
 
     } catch (err){
         console.error(err)
@@ -792,8 +895,6 @@ exports.adminTicketView = async (req, res) => {
         .withGraphFetched('[agent.[user], client.[user]]')
         .offset(offset).limit(page_size)
         .orderBy('created_at', 'desc');
-
-        console.log(userTickets)
         
         let total_pages = Math.ceil(totalTickets / page_size);
 
@@ -980,6 +1081,7 @@ exports.processAdminTickets = async (req, res) => {
     }
 
     let assignedAgentId = null;
+    let assignedAgent = null;
 
     const {responseTag, botResponse} = await getResponse(String(value.title))
 
@@ -1040,6 +1142,8 @@ exports.processAdminTickets = async (req, res) => {
 
     try {
 
+        assignedAgent = User.query().where("id", assignedAgentId).first()
+
         await Ticket.query().insert({
             ticket_id: ticket_id, 
             agent_id: assignedAgentId, 
@@ -1050,8 +1154,29 @@ exports.processAdminTickets = async (req, res) => {
             priority: value.priority
         })
 
-        req.flash('success', 'Sucessfully Created Ticket For client')
-        res.redirect("/dashboard/admin/ticket")
+
+        const website = `${req.protocol}://${req.get('host')}/dashboard/login/`;
+
+
+        const mailOptions = mailObject(
+            value.client_email,
+            "Ticket Created",
+            `A ticket has been created for you and this agent, ${assignedAgent.first_name}, has been assigned to the case. Log on to ${website}`,
+            )
+
+        transporter.sendMail(mailOptions, function(err, data) {
+            if (err) {
+                console.log(err)
+                res.render("dashboard/admin/tickets", {current_user: current_user, user_role: user_role, error: "Error Occured Sending Email", csrfToken: req.csrfToken()})
+                return        
+            } else {
+            req.flash('success', 'Sucessfully Created Ticket For client')
+            res.redirect("/dashboard/admin/ticket")
+            return
+            }
+          });
+
+
 
     } catch (err) {
         console.error(err)
@@ -1106,8 +1231,6 @@ exports.processAdminEditTickets = async (req, res) => {
             csrfToken: req.csrfToken()})
         return
     }
-
-    console.log(value)
 
     const ticket = await Ticket.query().where("ticket_id", value.ticket_id).first()
 
@@ -1183,8 +1306,6 @@ exports.processAgentEditTickets = async (req, res) => {
             csrfToken: req.csrfToken()})
         return
     }
-
-    console.log(value)
 
     const ticket = await Ticket.query().where("ticket_id", value.ticket_id).first()
     
@@ -1323,7 +1444,7 @@ exports.agentTicketView = async (req, res) => {
 
 }
 
-// create view ticket page for only admin
+// create view ticket page for agent and admin
 // method: POST
 exports.processAgentTickets = async (req, res) => {
 
@@ -1410,6 +1531,7 @@ exports.processAgentTickets = async (req, res) => {
     }
 
     let assignedAgentId = null;
+    let assignedAgent = null;
 
     const {responseTag, botResponse} = await getResponse(String(value.title))
     
@@ -1468,6 +1590,8 @@ exports.processAgentTickets = async (req, res) => {
 
     try {
 
+        assignedAgent = User.query().where("id", assignedAgentId).first()
+
         await Ticket.query().insert({
             ticket_id: ticket_id, 
             agent_id: assignedAgentId, 
@@ -1478,8 +1602,27 @@ exports.processAgentTickets = async (req, res) => {
             priority: value.priority
         })
 
-        req.flash('success', 'Sucessfully created the Ticket For client')
-        res.redirect("/dashboard/agent/ticket"); 
+
+        const website = `${req.protocol}://${req.get('host')}/dashboard/login/`;
+
+        const mailOptions = mailObject(
+            value.client_email,
+            "Ticket Created",
+            `A ticket has been created for you and this agent, ${assignedAgent.first_name}, has been assigned to the case. Log on to ${website}`,
+            )
+
+        transporter.sendMail(mailOptions, function(err, data) {
+            if (err) {
+                console.log(err)
+                res.render("dashboard/agent/tickets", {current_user: current_user, user_role: user_role, error: "Error Occured Sending Email", csrfToken: req.csrfToken()})
+                return        
+            } else {
+                req.flash('success', 'Sucessfully created the Ticket For client')
+                res.redirect("/dashboard/agent/ticket"); 
+            return
+            }
+          });
+
 
     } catch (err) {
         console.error(err)
@@ -1519,7 +1662,36 @@ exports.reports = async (req, res) => {
 
 exports.getReportStatus = async (req, res) => {
     const selectedStatus = req.params.ticketStatus
+
+    console.log(selectedStatus)
+
     try {
+
+        if (selectedStatus === 'RATINGS'){
+
+            const agentTicketCounts = await Agent.query()
+            .select('users.first_name', 'users.last_name')
+            .join('users', 'agents.user_id', '=', 'users.id')
+            .join('tickets', 'tickets.agent_id', '=', 'agents.user_id')
+            .avg('tickets.ratings as avg_ratings')
+            .where('tickets.status', "CLOSED")
+            .groupBy('users.first_name', 'users.last_name');
+      
+          const formattedCounts = agentTicketCounts.reduce((counts, agent) => {
+            const fullName = `${agent.first_name} ${agent.last_name}`;
+            counts[fullName] = parseInt(agent.avg_ratings);
+            return counts;
+          }, {});
+
+          console.log(agentTicketCounts)
+   
+          console.log(formattedCounts)
+      
+          res.json({ ticketsData: formattedCounts });
+
+
+        } else {
+
         const agentTicketCounts = await Agent.query()
         .select('users.first_name', 'users.last_name')
         .join('users', 'agents.user_id', '=', 'users.id')
@@ -1534,9 +1706,12 @@ exports.getReportStatus = async (req, res) => {
         return counts;
       }, {});
 
+      console.log(agentTicketCounts)
       console.log(formattedCounts)
   
       res.json({ ticketsData: formattedCounts });
+
+    }
     } catch (error) {
       console.error('Error fetching agent ticket counts:', error);
       res.status(500).json({ error: 'An error occurred while fetching agent ticket counts' });
