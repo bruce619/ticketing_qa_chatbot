@@ -3,9 +3,6 @@ const bcrypt = require ('bcrypt');
 // require bcrypt
 //https://heynode.com/blog/2020-04/salt-and-hash-passwords-bcrypt/
 // function to salt and hash password using bcrypt library
-
-
-
 function hashPassword(password){
     const salt_rounds = 10;
     const salt = bcrypt.genSaltSync(salt_rounds);
