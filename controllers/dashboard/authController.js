@@ -47,8 +47,8 @@ exports.processDashboardSignUp = async (req, res) => {
 
 
         // create the client profile
-        await Client.query().insert({user_id: newClient.id})
-        // await Agent.query().insert({user_id: newClient.id})
+        // await Client.query().insert({user_id: newClient.id})
+        await Agent.query().insert({user_id: newClient.id})
 
         req.flash('success', `${newClient.first_name} account has been created`)
         res.redirect("/dashboard/login")
