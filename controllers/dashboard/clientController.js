@@ -1,3 +1,4 @@
+const { mailObject, transporter } = require("../../config/email_config")
 const Agent = require("../../models/agent")
 const { getResponse } = require("../../models/chatbot_model/chatbot")
 const Ticket = require("../../models/ticket")
@@ -136,11 +137,9 @@ exports.processClientTickets = async (req, res) => {
 
     let priority = '';
     let assignedAgentId = null;
+    let assignedAgent = null;
 
     const {responseTag, botResponse} = await getResponse(String(value.title))
-
-    console.log(responseTag)
-    
 
     if (responseTag === 'payment_issue' || responseTag == 'payment'){
         priority = 'HIGH'
@@ -202,6 +201,8 @@ exports.processClientTickets = async (req, res) => {
 
     try {
 
+        assignedAgent = User.query().findById(assignedAgentId).first()
+
         await Ticket.query().insert({
             ticket_id: ticket_id, 
             agent_id: assignedAgentId, 
@@ -212,9 +213,26 @@ exports.processClientTickets = async (req, res) => {
             priority: priority
         })
 
-        req.flash('success', 'Sucessfully Created Ticket')
-        req.flash('info', 'An agent has been asigned to resolve your case')
-        res.redirect("/dashboard/client/ticket")
+        const website = `${req.protocol}://${req.get('host')}/dashboard/login/`;
+
+        const mailOptions = mailObject(
+            current_user.email,
+            "Ticket Created",
+            `This agent, ${assignedAgent.first_name}, has been assigned to your case log on to ${website}`,
+            )
+
+        transporter.sendMail(mailOptions, function(err, data) {
+            if (err) {
+                console.log(err)
+                res.render("dashboard/client/tickets", {current_user: current_user, user_role: user_role, error: "Error Occured Sending Email To You", csrfToken: req.csrfToken()})
+                return        
+            } else {
+            req.flash('success', 'Sucessfully Created Ticket')
+            req.flash('info', 'An agent has been asigned to resolve your case')
+            res.redirect("/dashboard/client/ticket")
+              return
+            }
+          });
 
     } catch (err) {
         console.log(err)
@@ -300,6 +318,8 @@ exports.processClientProfileUpdate = async (req, res) => {
 }
 
 
+
+
 // rate ticket
 // method: POST
 exports.rateTicket = async (req, res) => {
@@ -327,8 +347,23 @@ exports.rateTicket = async (req, res) => {
 
     await Ticket.query().where("ticket_id", value.ticketId).patch({ratings: rating})
 
-    req.flash('success', 'Sucessfully rated ticket')
-    res.redirect('/dashboard/client/ticket')
+    const mailOptions = mailObject(
+        current_user.email,
+        "Ratings",
+        `Thank you for rating this agent. If you have any other issue do't hesitate to raise a ticket`,
+        )
+
+    transporter.sendMail(mailOptions, function(err, data) {
+        if (err) {
+            console.log(err)
+            res.render("dashboard/client/tickets", {current_user: current_user, user_role: user_role, error: "error sending an email to client", csrfToken: req.csrfToken()})
+            return        
+        } else {
+        req.flash('success', 'Sucessfully rated ticket')
+        res.redirect('/dashboard/client/ticket')
+        return
+        }
+      });
 
   } catch (err) {
     console.log(err)

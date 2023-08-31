@@ -46,21 +46,29 @@ async function preprocessTextInput(textInput, model, loadedTokenizer, input_shap
 }
 
 
-async function getResponse(textInput){
 
+// fuction use to get chatbot intent and response
+
+async function getResponse(textInput){
+    // load model
     const model = await loadModel()
 
+    // activate tokenizer
     const loadModelInfoPath = path.join(__dirname, '../../model_info.json');
     const readModelInfo = await readFile(loadModelInfoPath);
     const { tokenizer, input_shape, responses, encoder_classes } = JSON.parse(readModelInfo);
-
     const loadedTokenizer = tokenizerFromJson(tokenizer)
 
+    // preprocess userInput and retrieve the intent tag and and response
     const {responseTag, botResponse} = await preprocessTextInput(textInput, model, loadedTokenizer, input_shape, responses, encoder_classes)
 
     return {responseTag, botResponse}
 
 }
+
+
+
+
 
 module.exports = {
     getResponse
