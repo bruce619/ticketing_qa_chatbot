@@ -19,11 +19,11 @@ router.get('/dashboard/create/client', loginRequired("admin", "agent"),  createC
 router.post('/dashboard/create/client', loginRequired("admin", "agent"),  processClientSignUp);
 router.post('/dashboard/edit/client-info', loginRequired("admin", "agent"),  staffEditClient);
 router.get('/dashboard/admin/ticket', loginRequired("admin"), adminTicketView);
-router.post('/dashboard/admin/ticket', loginRequired("admin"), processAdminTickets);
+router.post('/dashboard/admin/ticket', loginRequired("admin"), processAdminTickets); //
 router.post('/dashboard/admin/edit-ticket', loginRequired("admin"), processAdminEditTickets);
 router.get('/api/agent-emails/:tag', getAgentEmails);
 router.get('/dashboard/agent/ticket', loginRequired("agent"), agentTicketView);
-router.post('/dashboard/agent/ticket', loginRequired("agent"), processAgentTickets);
+router.post('/dashboard/agent/ticket', loginRequired("agent"), processAgentTickets); //
 router.post('/dashboard/agent/edit-ticket', loginRequired("agent"), processAgentEditTickets);
 router.get('/dashboard/reports', loginRequired("admin", "agent"),  reports);
 router.get('/api/tickets/status/:ticketStatus',  getReportStatus);

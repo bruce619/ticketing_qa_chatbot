@@ -43,7 +43,7 @@
     <main class="signup">
       <div class="signup__container">
         <h4>Insert OTP code</h4>
-        <form action="/auth/otp/<%= user %>" method="POST" class="signup__form">
+        <form action="/dashboard/auth/otp/<%= user %>" method="POST" class="signup__form">
           <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
           <div class="form_group">
             <input type="text" name="otp" id="otp" placeholder="OTP" required/>              

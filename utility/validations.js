@@ -170,12 +170,18 @@ exports.passwordResetSchema = Joi.object({
         'string.pattern.base': 'Invalid entry. Password must cointain a minimum of 8 characters, and at least one uppercase letter, number, and special character'
       })
       .required(),
-      token: Joi.string().min(30).max(30)
-      .pattern(RegExp(tokenPattern))
-      .messages({
-        'string.pattern.base': 'Invalid token'
-      })
-  
+    token: Joi.string().min(30).max(30)
+    .pattern(RegExp(tokenPattern))
+    .messages({
+      'string.pattern.base': 'Invalid token'
+    }),
+    id: Joi.string()
+    .pattern(RegExp(uuidPattern))
+    .required()
+    .messages({
+        'string.pattern.base': 'Invalid ID.'
+    })
+
   })
 
 
@@ -184,6 +190,12 @@ exports.passwordResetSchema = Joi.object({
     .pattern(RegExp(tokenPattern))
     .messages({
       'string.pattern.base': 'Invalid token'
+    }),
+    id: Joi.string()
+    .pattern(RegExp(uuidPattern))
+    .required()
+    .messages({
+        'string.pattern.base': 'Invalid ID.'
     })
 })
 

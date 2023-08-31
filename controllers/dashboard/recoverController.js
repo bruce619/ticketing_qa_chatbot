@@ -1,7 +1,8 @@
-const { otpTimestamp, getRandomAlphanumericString } = require('../../utility/utils');
+const { otpTimestamp, getRandomAlphanumericString, getCurrentTimestamp } = require('../../utility/utils');
 const { mailObject, transporter } = require('../../config/email_config');
 const User = require('../../models/user');
 const { forgotPasswordSchema, passwordResetSchema, tokenSchema } = require('../../utility/validations');
+const { hashPassword } = require('../../utility/helpers');
 
 
 // forget password page 
@@ -45,8 +46,10 @@ exports.processForgotPassword = async (req, res) => {
     }).then(()=>{
 
         // password reset link
-        const password_reset_link = `${req.protocol}://${req.get('host')}/reset-password/${reset_token}/`;
+        const password_reset_link = `${req.protocol}://${req.get('host')}/dashboard/reset-password/${emailExists.id}/${reset_token}/`;
 
+        console.log(password_reset_link)
+        
         const mailOptions = mailObject(
             emailExists.email,
             "Password Reset Link",
@@ -81,14 +84,14 @@ exports.createNewPasswordView = async (req, res) => {
         return
     }
 
-    User.query().findOne({reset_password_token: value.token})
+    User.query().findOne({id: value.id, reset_password_token: value.token})
     .where('reset_password_expiry_time', '>', getCurrentTimestamp())
     .then(user => {
         if (!user){
             res.render('dashboard/forgot_password', {error: 'Token has expired or is Invalid', csrfToken: req.csrfToken()})
             return
         }
-        res.render("dashboard/create_password", {reset_token: value.token, csrfToken: req.csrfToken()})
+        res.render("dashboard/create_password", {id: value.id, reset_token: value.token, csrfToken: req.csrfToken()})
         return
     })
     .catch((err)=>{
@@ -114,7 +117,7 @@ exports.processCreateNewPassword = async (req, res) => {
 
     value.password = hashPassword(value.password)
 
-    User.query().findOne({reset_password_token: value.token})
+    User.query().findOne({id: value.id, reset_password_token: value.token})
     .where('reset_password_expiry_time', '>', getCurrentTimestamp())
     .then(user => {
         if (!user){
