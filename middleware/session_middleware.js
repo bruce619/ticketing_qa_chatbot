@@ -6,7 +6,7 @@ const RedisStore = require('connect-redis')(session);
 
 const SECRET = config.app.secret_key
 
-const REDIS_URL = process.env.REDIS || ''
+const REDIS_URL = process.env.REDIS_URL || ''
 
 // redis store middleware
 const redisClient = new Redis(REDIS_URL);
