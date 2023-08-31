@@ -25,6 +25,15 @@ function getCurrentTime() {
     return Math.random().toString().substr(2, 6)
   }
 
+  function otpTimestamp() {
+  
+    // Add 15 min to current date-time
+    const expiry_date_time = new Date(getCurrentTimestamp().getTime() + 15 * 60000);
+    // convert to timestamp
+    return expiry_date_time;
+  
+  }
+
   function getDateTimestamp() {
     const current_date_time = new Date();
   
@@ -52,15 +61,6 @@ function getCurrentTime() {
   function getCurrentTimestamp(){
     current_date_time = new Date();
     return current_date_time
-  }
-  
-  function otpTimestamp() {
-  
-    // Add 15 min to current date-time
-    const expiry_date_time = new Date(getCurrentTimestamp().getTime() + 15 * 60000);
-    // convert to timestamp
-    return expiry_date_time;
-  
   }
 
 
