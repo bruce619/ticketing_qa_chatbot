@@ -170,7 +170,7 @@ exports.createClientView = async (req, res) => {
                 current_user: current_user, 
                 user_role: user_role,
                 clients: clients,
-                search_result: '', 
+                search_results: '', 
                 total_pages: total_pages,
                 current_page: page,
                 csrfToken: req.csrfToken()
@@ -181,7 +181,7 @@ exports.createClientView = async (req, res) => {
                 current_user: current_user, 
                 user_role: user_role,
                 clients: clients,
-                search_result: '', 
+                search_results: '', 
                 total_pages: total_pages,
                 current_page: page,
                 csrfToken: req.csrfToken()
@@ -494,7 +494,7 @@ exports.createAgentView = async (req, res) => {
                 current_user: current_user, 
                 user_role: user_role,
                 agents: agents,
-                search_result: '', 
+                search_results: '', 
                 total_pages: total_pages,
                 current_page: page,
                 csrfToken: req.csrfToken()
@@ -505,7 +505,7 @@ exports.createAgentView = async (req, res) => {
                 current_user: current_user, 
                 user_role: user_role,
                 agents: agents,
-                search_result: '', 
+                search_results: '', 
                 total_pages: total_pages,
                 current_page: page,
                 csrfToken: req.csrfToken()

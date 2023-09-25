@@ -6,8 +6,12 @@ const RedisStore = require('connect-redis')(session);
 
 const SECRET = config.app.secret_key
 
-// redis store middleware
-const redisClient = new Redis();
+const REDIS_URL = process.env.REDIS_URL
+
+// redis store middleware for production test
+const redisClient = new Redis(REDIS_URL);
+// redis stor middleware for local
+// const redisClient = new Redis();
 
 const store = new RedisStore({client: redisClient});
 
