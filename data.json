@@ -1571,7 +1571,7 @@
 			],
 			
 			"responses": [
-				"Sorry to here this. If you are experiencing problems with your payment and would like to register complaints you can create a ticket on the <a href='/dashboard/login' target='_blank'>dashboard ticketing system</a>. You can register if you haven't done so already <a href='/dashboard/register'>here</a> and we will connect an agent to your case. Don't forget to include all the necessary details that will help the agent assist you."
+				"Sorry to here this. If you are experiencing problems with your payment and would like to register complaints you can create a ticket on the <a href='/dashboard/login' target='_blank'>dashboard ticketing system</a>. You can register if you haven't done so already <a href='/dashboard/signup'>here</a> and we will connect an agent to your case. Don't forget to include all the necessary details that will help the agent assist you."
 			]
 		},
 		{
@@ -2254,7 +2254,7 @@
 			"I don't know how to get my money back"
 		   ],
 		   "responses": [
-			 "If you have already read our refund policy on our website and still want a refund, you can create a ticket on the <a href='/dashboard/login' target='_blank'>dashboard ticketing system</a>. You can register if you haven't done so already <a href='/dashboard/register'>here</a> and we will connect an agent to your case. Don't forget to add important details like order ID and evidence of payment."
+			 "If you have already read our refund policy on our website and still want a refund, you can create a ticket on the <a href='/dashboard/login' target='_blank'>dashboard ticketing system</a>. You can register if you haven't done so already <a href='/dashboard/signup'>here</a> and we will connect an agent to your case. Don't forget to add important details like order ID and evidence of payment."
 			]
 		 },
 		 {
@@ -3289,7 +3289,7 @@
 				"could I create an account?"
 			],
 			"responses": [
-				"To create a new account/profile visit the registration page of the dashboard ticketing system and fill and your credentials. <a href='/dashboard/register' target='_blank'>Register</a>"
+				"To create a new account/profile visit the registration page of the dashboard ticketing system and fill and your credentials. <a href='/dashboard/signup' target='_blank'>Register</a>"
 			]
 		},
 		
