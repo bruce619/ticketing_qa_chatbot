@@ -30,9 +30,6 @@ exports.processbotResponseHomeView = async (req, res) =>{
 exports.getConversations = async (req, res) => {
     const userId = req.session.userId
     const userRole = req.session.role; // extract the user role from token
-
-    console.log(userRole)
-    console.log(userId)
   
     try {
 
@@ -52,8 +49,6 @@ exports.getConversations = async (req, res) => {
 
 
         let conversation = await Conversation.query().where('ticket_id', ticket_id.id).orderBy('sent_at', 'asc');
-
-      console.log(conversation)
   
       res.json(conversation);
 
@@ -92,7 +87,6 @@ exports.sendMessage = async (req, res) => {
         return
     }
 
-    console.log(value)
 
     const getTicket = await Ticket.query().where('ticket_id', value.ticketId).first()
 
